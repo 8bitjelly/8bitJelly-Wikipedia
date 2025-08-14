@@ -20,8 +20,9 @@ export default function SidebarItem({ item, currentSlug = '', level = 0, searchQ
         if (matchesSearch) setIsExpanded(true)
     }, [matchesSearch])
 
-    const isActive = currentSlug && currentSlug === item.slug
-    const isParentOfActive = currentSlug && currentSlug.startsWith(item.slug + '/')
+    const decodedSlug = decodeURIComponent(currentSlug)
+    const isActive = decodedSlug === item.slug
+    const isParentOfActive = decodedSlug.startsWith(item.slug + '/')
     const isClickable = !item.isDirectory || item.hasIndex
 
     const paddingClass = {
@@ -79,7 +80,7 @@ export default function SidebarItem({ item, currentSlug = '', level = 0, searchQ
             {item.children && item.children.length > 0 && (
                 <ul
                     className={`overflow-hidden transition-[max-height] duration-300 ease-in-out ${
-                        isExpanded ? 'max-h-96' : 'max-h-0'
+                        isExpanded ? 'max-h-[2000px]' : 'max-h-0'
                     }`}
                 >
                     {item.children.map((child) => (
@@ -92,6 +93,7 @@ export default function SidebarItem({ item, currentSlug = '', level = 0, searchQ
                         />
                     ))}
                 </ul>
+
             )}
         </li>
     )
