@@ -16,8 +16,8 @@ Unity provides several `Find()` methods such as `GameObject.Find()`, `Transform.
 
 - Every call traverses objects in memory.
 - Cost grows with scene size.
-- Using `Find()` in `Update()` or frequent logic creates **serious performance bottlenecks**.
-
+- Using `Find()` in [`Update()`](Update()) or frequent logic creates **serious performance bottlenecks**.
+  
 ---
 
 ### 2. Fragile Code

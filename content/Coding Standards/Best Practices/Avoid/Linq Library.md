@@ -99,7 +99,7 @@ There are cases where LINQ can still be useful:
 - One-time setup code (e.g., scene initialization).
 - Debugging utilities where readability matters more than efficiency.
 
-> But never use LINQ inside Update(), FixedUpdate(), coroutines, or tight gameplay loops.
+> ⚠️ But never use LINQ inside [`Update()`](Update()), FixedUpdate(), coroutines, or tight gameplay loops.
 
 ---
 

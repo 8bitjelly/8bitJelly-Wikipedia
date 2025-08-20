@@ -68,7 +68,7 @@ Create a centralized manager that handles when objects should be recycled or hid
 ### Scene Management Tools
 Use additive scenes or addressables to load/unload larger groups of objects efficiently instead of destroying them piecemeal.
 
-### When is `Destroy()` Acceptable?
+## When is `Destroy()` Acceptable?
 
 There are cases where `Destroy()` is fine, such as:
 

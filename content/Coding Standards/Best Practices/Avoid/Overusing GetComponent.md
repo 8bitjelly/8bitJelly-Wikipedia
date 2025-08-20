@@ -13,7 +13,7 @@ When developing games in Unity, one of the most common mistakes beginners (and s
 
 ### 1. Performance Cost
 - `GetComponent` isn’t *free*. Every time you call it, Unity searches through the components on the GameObject to find the requested type.
-- In small projects, this may not be noticeable, but in **larger projects with thousands of objects**, repeated calls inside `Update()` or physics loops can cause **serious frame drops**.
+- In small projects, this may not be noticeable, but in **larger projects with thousands of objects**, repeated calls inside [`Update()`](Update()) or physics loops can cause **serious frame drops**.
 - Example:
   ```csharp
   private void Update()

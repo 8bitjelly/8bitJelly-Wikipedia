@@ -48,10 +48,8 @@ Advantages:
 
 ---
 
-> Never use public fields just for Inspector access.
+> ⚠️ Never use public fields just for Inspector access.
 
-> Use [SerializeField] private for all fields that need to be tweaked in the Editor.
-
-> Use public only for API methods or read-only properties, not raw data.
+> ⚠️ Use [SerializeField] private for all fields that need to be tweaked in the Editor.
 
 

@@ -145,7 +145,7 @@ There are cases where `Update()` is the right tool:
 - Input with the old Input Manager.
 - Non-physics-driven character movement.
 
-> Rule of Thumb: If it doesn’t need to run every frame, it shouldn’t be in `Update()`.
+> ⚠️ If it doesn’t need to run every frame, it shouldn’t be in `Update()`.
 
 ## Understanding `LateUpdate()` and `FixedUpdate()`
 Unity provides `LateUpdate()` and `FixedUpdate()` alongside `Update()`. Each has specific use cases.
@@ -188,4 +188,4 @@ private void FixedUpdate()
 
 ---
 
-> Important: Don’t handle input in `FixedUpdate()`. Input happens per frame, not per physics step — you’ll miss inputs if the frame rate is higher than the physics tick rate.
+> ⚠️ Important: Don’t handle input in `FixedUpdate()`. Input happens per frame, not per physics step — you’ll miss inputs if the frame rate is higher than the physics tick rate.
