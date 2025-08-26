@@ -1,5 +1,5 @@
 ---
-title: Git Commit Messages
+title: Git Workflow Commit Messages
 description: How commit messages should look like?
 ---
 

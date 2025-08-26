@@ -20,7 +20,7 @@ When you store all your data in MonoBehaviours:
 - Data is tied to **specific GameObjects**.
 - Duplicating prefabs/scenes leads to **duplicate copies of the same data**.
 - Testing and balancing values requires entering Play mode, changing them, and then remembering to save changes.
-- Cross-scene data sharing becomes messy, often leading to **Singletons** or static variables.
+- Cross-scene data sharing becomes messy, often leading to **[Singletons](Avoid/Singleton)** or static variables.
 
 Example (inefficient):
 
