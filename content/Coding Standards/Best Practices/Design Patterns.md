@@ -3,6 +3,20 @@ title: Design Patterns
 description: Why design patterns are important?
 ---
 
+## Work in progress
+
+Factory pattern
+Object pooling
+MVP
+MVVM
+Singleton
+Strategy
+Command
+Flyweight
+State
+Dirty flag
+Observer
+
 #  Design Patterns in Unity Game Development
 
 Design patterns are proven templates for solving common problems in software development and they’re especially powerful in game programming. When used wisely, they help you build clean, flexible, and maintainable systems.

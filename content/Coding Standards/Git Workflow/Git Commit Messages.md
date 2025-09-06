@@ -9,7 +9,7 @@ Writing good commit messages helps you and your team understand what happened an
 
 ---
 
-### Rules for Good Commit Messages
+## Rules for Good Commit Messages
 ### Be clear and concise
 Describe what the commit does, not just the fact that something changed.
 #### Good Example
