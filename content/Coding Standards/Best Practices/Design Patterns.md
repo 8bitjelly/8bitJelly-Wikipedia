@@ -47,22 +47,22 @@ Below are some of the most beneficial patterns tailored for game development in 
 Excellent for AIs, character states, or game phases. Each state (`Idle`, `Attacking`, `Dead`) becomes a self-contained class implementing a common interface, enhancing clarity and maintainability.
 
 ### 2. **Observer**
-Ideal for event-driven systems, UI updates, and decoupled messaging. Publishers fire events; subscribers handle them—without knowing who’s sending them.
+Ideal for event-driven systems, UI updates, and decoupled messaging. Publishers fire events; subscribers handle them-without knowing who’s sending them.
 
 ### 3. **Strategy**
-Encapsulates interchangeable behaviors (e.g., different attack patterns). Switch at runtime—your AI or systems become more flexible and configurable.
+Encapsulates interchangeable behaviors (e.g., different attack patterns). Switch at runtime-your AI or systems become more flexible and configurable.
 
 ### 4. **Facade**
-Simplifies complex subsystems behind a unified interface. For example, wrap audio, UI, and analytics systems into a single manager—keeping client code clean.
+Simplifies complex subsystems behind a unified interface. For example, wrap audio, UI, and analytics systems into a single manager-keeping client code clean.
 
 ### 5. **Object Pool**
-A performance-friendly pattern that reuses objects instead of instantiating and destroying them repeatedly—perfect for bullets, visual effects, etc.
+A performance-friendly pattern that reuses objects instead of instantiating and destroying them repeatedly-perfect for bullets, visual effects, etc.
 
 ### 6. **Prototype**
 Clone existing objects or data for lightweight instantiation. Handy when you need variants of existing templates at runtime.
 
 ### 7. **Flyweight**
-Optimize memory by sharing common data—ideal for large numbers of similar entities (e.g., visual props, tile maps).
+Optimize memory by sharing common data-ideal for large numbers of similar entities (e.g., visual props, tile maps).
 
 ---
 
@@ -90,6 +90,6 @@ https://refactoring.guru/design-patterns/csharp
 
 ##  Final Thoughts
 
-Design patterns are your toolbox—use them when they help solve a real problem. Avoid over-engineering; instead, focus on clarity, modularity, and future-proof architecture. Choose the pattern that fits the challenge.
+Design patterns are your toolbox-use them when they help solve a real problem. Avoid over-engineering; instead, focus on clarity, modularity, and future-proof architecture. Choose the pattern that fits the challenge.
 
 ---

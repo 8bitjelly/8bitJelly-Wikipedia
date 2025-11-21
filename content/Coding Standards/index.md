@@ -8,7 +8,7 @@ description: Coding Standards in 8BitJelly
 Welcome to the **Coding Standards** section of our documentation.  
 Here, you’ll find the agreed-upon rules and practices that help us keep our codebase **consistent, maintainable, and scalable** across all projects.
 
-These standards are meant to guide both new and experienced team members, ensuring we all write code that is easy to read, test, and extend — no matter the size of the game.
+These standards are meant to guide both new and experienced team members, ensuring we all write code that is easy to read, test, and extend - no matter the size of the game.
 
 ---
 

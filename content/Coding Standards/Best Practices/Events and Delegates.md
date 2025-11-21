@@ -7,7 +7,7 @@ description: ???
 
 Events and delegates are powerful features in C# that allow scripts to **communicate without being tightly coupled**. Instead of one script directly calling another, you can broadcast messages (events) that other scripts can subscribe to.
 
-This makes your code **more modular, flexible, and reusable** — which is especially valuable in game development, where systems often evolve and change over time.
+This makes your code **more modular, flexible, and reusable** - which is especially valuable in game development, where systems often evolve and change over time.
 
 ---
 
@@ -71,7 +71,7 @@ public static class LevelManagerEvents
 ## Why Use Events?
 
 ### Loose Coupling
-The LevelManager doesn’t need to know which scripts are listening — it just broadcasts events. Other systems (UI, Audio, Save System) can respond independently.
+The LevelManager doesn’t need to know which scripts are listening - it just broadcasts events. Other systems (UI, Audio, Save System) can respond independently.
 
 ### Scalability
 New features can be added without modifying existing scripts. For example, adding a sound effect when the level loads only requires subscribing to LoadNextLevel.

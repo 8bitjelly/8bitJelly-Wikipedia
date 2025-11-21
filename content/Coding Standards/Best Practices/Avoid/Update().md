@@ -5,7 +5,7 @@ description: Why Update() is not always good?
 
 # Why You Should Be Careful with `Update()` in Unity
 
-In Unity, the `Update()` method is often one of the first things developers learn. It runs once per frame, making it tempting to put **all logic** inside it. While `Update()` is useful for some tasks, overusing it leads to wasted CPU cycles, poor scalability, and hard-to-maintain code. Understanding when to use `Update()` — and when to avoid it — is essential for writing clean, performant games.
+In Unity, the `Update()` method is often one of the first things developers learn. It runs once per frame, making it tempting to put **all logic** inside it. While `Update()` is useful for some tasks, overusing it leads to wasted CPU cycles, poor scalability, and hard-to-maintain code. Understanding when to use `Update()` - and when to avoid it - is essential for writing clean, performant games.
 
 ---
 
@@ -188,4 +188,4 @@ private void FixedUpdate()
 
 ---
 
-> ⚠️ Important: Don’t handle input in `FixedUpdate()`. Input happens per frame, not per physics step — you’ll miss inputs if the frame rate is higher than the physics tick rate.
+> ⚠️ Important: Don’t handle input in `FixedUpdate()`. Input happens per frame, not per physics step - you’ll miss inputs if the frame rate is higher than the physics tick rate.

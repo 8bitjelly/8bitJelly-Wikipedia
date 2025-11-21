@@ -5,7 +5,7 @@ description: Why Find() is bad?
 
 # Why You Should Avoid `Find()` in Unity
 
-Unity provides several `Find()` methods such as `GameObject.Find()`, `Transform.Find()`, and `FindObjectOfType()` to locate objects in your scene. While they may seem convenient, overusing them leads to performance issues, poor code maintainability, and hidden dependencies. Understanding why `Find()` is problematic — and what to use instead — is key to writing clean, efficient, and scalable Unity projects.
+Unity provides several `Find()` methods such as `GameObject.Find()`, `Transform.Find()`, and `FindObjectOfType()` to locate objects in your scene. While they may seem convenient, overusing them leads to performance issues, poor code maintainability, and hidden dependencies. Understanding why `Find()` is problematic - and what to use instead - is key to writing clean, efficient, and scalable Unity projects.
 
 ---
 
@@ -25,7 +25,7 @@ Unity provides several `Find()` methods such as `GameObject.Find()`, `Transform.
 
 - If you rename a `GameObject`, all `Find()` calls break silently.
 - If the hierarchy changes (e.g., nesting objects differently), your code no longer works.
-- No compile-time safety — typos in names won’t be caught until runtime.
+- No compile-time safety - typos in names won’t be caught until runtime.
 
 This makes debugging more difficult and increases maintenance overhead.
 

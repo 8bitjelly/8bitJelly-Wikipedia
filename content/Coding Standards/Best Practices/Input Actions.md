@@ -55,7 +55,7 @@ Unity’s Input System with Input Actions provides a much more powerful and scal
 - The same action (e.g., “Jump”) can be triggered by different devices.
 
 ### 2. Device Independence
-- he same Input Action can work on keyboard, gamepad, or mobile.
+- The same Input Action can work on keyboard, gamepad, or mobile.
 - No need to rewrite input checks for each platform.
 
 ### 3. Cleaner, Decoupled Code

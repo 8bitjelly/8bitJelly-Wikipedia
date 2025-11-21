@@ -5,7 +5,7 @@ description: Why you should be careful with Singletons?
 
 # Singletons
 
-Singletons are one of the most common patterns used in Unity development. They provide a global point of access to a single instance of a class — for example, `GameManager.Instance` or `AudioManager.Instance`. While this might feel convenient, **overusing Singletons can introduce more problems than they solve**.
+Singletons are one of the most common patterns used in Unity development. They provide a global point of access to a single instance of a class - for example, `GameManager.Instance` or `AudioManager.Instance`. While this might feel convenient, **overusing Singletons can introduce more problems than they solve**.
 
 ---
 
@@ -27,7 +27,7 @@ Singletons are one of the most common patterns used in Unity development. They p
 
 ### 3. **Encourages God Classes**
 - Since Singletons are easy to access from anywhere, developers often keep adding more and more responsibilities to them.
-- This leads to bloated "god objects" like a `GameManager` that controls gameplay, UI, saving, spawning, and more — violating the **Single Responsibility Principle**.
+- This leads to bloated "god objects" like a `GameManager` that controls gameplay, UI, saving, spawning, and more - violating the **Single Responsibility Principle**.
 
 ---
 
@@ -66,6 +66,6 @@ Singletons aren’t *always* bad. They can be useful for:
 ## Final Thoughts
 
 Singletons are not inherently evil, but **heavy reliance on them can lead to fragile, hard-to-maintain code**.  
-Use them sparingly, and always question whether a Singleton is truly necessary — or if a more flexible, testable solution would serve better.
+Use them sparingly, and always question whether a Singleton is truly necessary - or if a more flexible, testable solution would serve better.
 
 > If you find yourself turning *everything* into a Singleton, your project architecture needs a rethink.

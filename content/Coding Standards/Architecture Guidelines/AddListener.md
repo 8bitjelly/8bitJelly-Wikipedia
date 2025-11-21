@@ -24,7 +24,7 @@ While both work, **subscribing in code is often the better choice** for larger o
 
 ### Fragile Setup
 - If you rename or move a script, Unity may lose the reference in the Inspector.
-- Broken links won’t show as compile errors — you only find out at runtime.
+- Broken links won’t show as compile errors - you only find out at runtime.
 
 ---
 

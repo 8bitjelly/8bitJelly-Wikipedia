@@ -13,20 +13,20 @@ When developing games in Unity, performance can make or break the player experie
 
 The **Unity Profiler** is a built-in diagnostic tool that tracks the performance of your game in real-time. It gives you detailed insights into:
 
-- **CPU Usage** — which scripts and methods consume the most time.
-- **GPU Usage** — how rendering affects frame rates.
-- **Memory** — allocations, garbage collection, and memory leaks.
-- **Physics** — costs of physics calculations, collisions, and rigidbody updates.
-- **Rendering** — draw calls, shaders, and batching efficiency.
-- **Audio** — performance of audio sources and effects.
-- **Networking** — monitoring data transfer and latency.
+- **CPU Usage** - which scripts and methods consume the most time.
+- **GPU Usage** - how rendering affects frame rates.
+- **Memory** - allocations, garbage collection, and memory leaks.
+- **Physics** - costs of physics calculations, collisions, and rigidbody updates.
+- **Rendering** - draw calls, shaders, and batching efficiency.
+- **Audio** - performance of audio sources and effects.
+- **Networking** - monitoring data transfer and latency.
 
 ---
 
 ## Why Should You Use the Unity Profiler?
 
 ### 1. Identify Performance Bottlenecks
-Without profiling, you’re only guessing. The Profiler shows exactly *where* the slowdown happens — whether it’s CPU-heavy scripts, too many draw calls, or excessive garbage collection.
+Without profiling, you’re only guessing. The Profiler shows exactly *where* the slowdown happens - whether it’s CPU-heavy scripts, too many draw calls, or excessive garbage collection.
 
 ### 2. Optimize Before It’s Too Late
 It’s tempting to leave optimization until the end of development. However, by profiling early, you can catch costly patterns (like overusing `Update()` or instantiating too many objects) before they spread across your project.
@@ -66,7 +66,7 @@ Consistent spikes in CPU or memory usually indicate garbage collection or an exp
 Deep Profiling shows method-level details but slows everything down. Use it strategically on smaller test cases.
 
 ### Profile Iteratively
-Don’t wait until the end of development — profile regularly and fix issues as you go.
+Don’t wait until the end of development - profile regularly and fix issues as you go.
 
 ---
 
