@@ -8,7 +8,7 @@ In Unity, creating objects at runtime is a core mechanic. Whether it’s bullets
 
 ---
 
-## Example – Spawning Bullets Every Frame
+## Example - Spawning Bullets Every Frame
 ```csharp
 public class Gun : MonoBehaviour
 {

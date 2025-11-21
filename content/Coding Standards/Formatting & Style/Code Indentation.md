@@ -15,7 +15,7 @@ Consistent code indentation is one of the simplest yet most important practices 
   This ensures consistency across different editors and avoids mixed indentation issues.
 - **Keep indentation consistent across the project** - every developer should follow the same style.
 - **Nest code logically** to make structures easy to follow. For example, every new block inside an `if`, `for`, or `class` should be indented one level deeper.
-- **Avoid overly deep nesting** - if indentation goes beyond 3–4 levels, consider refactoring into smaller methods.
+- **Avoid overly deep nesting** - if indentation goes beyond 3-4 levels, consider refactoring into smaller methods.
 
 ---
 

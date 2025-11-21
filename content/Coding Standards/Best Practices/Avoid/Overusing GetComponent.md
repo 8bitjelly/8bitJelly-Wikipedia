@@ -3,7 +3,7 @@ title: Overusing GetComponent
 description: Does it matter where we put GetComponent?
 ---
 
-# Overusing `GetComponent` – Why It’s Bad and How to Avoid It
+# Overusing `GetComponent` - Why It’s Bad and How to Avoid It
 
 When developing games in Unity, one of the most common mistakes beginners (and sometimes even experienced developers) make is **overusing `GetComponent` calls**. While `GetComponent<T>()` is a powerful method that allows you to access other components attached to the same GameObject (or its children/parents), relying on it too heavily can hurt both **performance** and **code quality**.
 
@@ -24,7 +24,7 @@ When developing games in Unity, one of the most common mistakes beginners (and s
   }
   ```
 
-If your game runs at 60 FPS, that’s 60 expensive lookups per second – per object.
+If your game runs at 60 FPS, that’s 60 expensive lookups per second - per object.
 
 ---
 
@@ -38,7 +38,7 @@ If your game runs at 60 FPS, that’s 60 expensive lookups per second – per ob
 
 ### 3. Code Readability and Maintainability
 - Excessive `GetComponent` calls make your code harder to read and more error-prone
-- Imagine working on a team project where `GetComponent` is scattered everywhere – it becomes difficult to know which components are essential to the script and which are optional.
+- Imagine working on a team project where `GetComponent` is scattered everywhere - it becomes difficult to know which components are essential to the script and which are optional.
 - This reduces the clarity of your code’s dependencies.
 
 ---

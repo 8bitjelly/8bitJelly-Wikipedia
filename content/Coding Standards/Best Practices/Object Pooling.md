@@ -5,7 +5,7 @@ description: Why You Should Use Object Pooling in Unity
 
 # Object Pooling in Unity
 In many Unity games, objects such as bullets, enemies, or particle effects are created and destroyed constantly during gameplay. While this may seem harmless, frequent calls to [`Instantiate()`](Avoid/Creating%20Multiple%20Objects) and [`Destroy()`](Avoid/Destroy()) cause **serious performance issues** over time.
-The solution? **Object Pooling** – a design pattern that reuses objects instead of creating and destroying them repeatedly.
+The solution? **Object Pooling** - a design pattern that reuses objects instead of creating and destroying them repeatedly.
 
 ---
 
@@ -59,7 +59,7 @@ Object Pooling is a technique where you **pre-create a pool of objects** and reu
 
 ---
 
-## Example – Bullet Pool
+## Example - Bullet Pool
 
 ```csharp
 using UnityEngine;

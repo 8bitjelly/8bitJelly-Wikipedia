@@ -9,7 +9,7 @@ Logging is an essential part of debugging and understanding what’s happening i
 
 ---
 
-## Example – Logging Every Frame
+## Example - Logging Every Frame
 ```csharp
 public class PlayerMovement : MonoBehaviour
 {

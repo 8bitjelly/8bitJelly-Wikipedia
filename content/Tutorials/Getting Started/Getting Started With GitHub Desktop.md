@@ -85,8 +85,8 @@ This is useful when you're still experimenting or when some files aren’t ready
 
 At the bottom-left, you’ll see two text boxes:
 
-- **Summary** – a short description of what changed
-- **Description (optional)** – a longer explanation
+- **Summary** - a short description of what changed
+- **Description (optional)** - a longer explanation
 
 Try to keep the summary clear and meaningful, check [`Git Commit Messages`](../../Coding%20Standards/Git%20Workflow/Git%20Commit%20Messages) for more information
 

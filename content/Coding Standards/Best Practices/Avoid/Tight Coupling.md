@@ -67,7 +67,7 @@ This creates spaghetti code that’s difficult to debug and almost impossible to
 
 ---
 
-## Best Practices – How to Avoid Tight Coupling
+## Best Practices - How to Avoid Tight Coupling
 
 ### Use Public Methods Instead of Direct Field Access
 

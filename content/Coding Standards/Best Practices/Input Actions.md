@@ -68,7 +68,7 @@ Unity’s Input System with Input Actions provides a much more powerful and scal
 
 ---
 
-## Example – Using Input Actions
+## Example - Using Input Actions
 
 ### Old Way (Coupled and Hardcoded):
 

@@ -3,7 +3,7 @@ title: "FMOD"
 description: "How to use"
 ---
 
-# 🎧 RAPID – Dokumentacja Systemu Audio (FMOD Integration)
+# 🎧 RAPID - Dokumentacja Systemu Audio (FMOD Integration)
 
 **Autor:** NOX  
 **Silnik audio:** FMOD Studio 2.03.09  
