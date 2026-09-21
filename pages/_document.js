@@ -1,11 +1,17 @@
 import { Html, Head, Main, NextScript } from 'next/document'
 import { THEME_SCRIPT } from '@/lib/theme-script'
+import { DEFAULT_LOCALE } from '@/lib/locales'
 
-export default function Document() {
+/**
+ * `locale` arrives as a plain prop: DocumentProps extends HtmlProps, which Next
+ * builds with the active locale and spreads into this component. No
+ * getInitialProps needed.
+ */
+export default function Document({ locale }) {
     return (
         // suppressHydrationWarning: the pre-paint script below mutates class and
         // data-accent on <html> before React hydrates.
-        <Html lang="en" suppressHydrationWarning>
+        <Html lang={locale || DEFAULT_LOCALE} suppressHydrationWarning>
             <Head>
                 {/* First child of <Head>, ahead of every stylesheet, so the
                     correct theme is in place for the first paint. */}

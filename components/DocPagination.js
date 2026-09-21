@@ -1,9 +1,11 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
+import { useT } from '@/lib/i18n'
 
 export default function DocPagination({ prev, next }) {
     const router = useRouter()
+    const t = useT()
 
     useEffect(() => {
         const onKeyDown = (event) => {
@@ -35,11 +37,11 @@ export default function DocPagination({ prev, next }) {
         'hover:border-line-strong transition-all group'
 
     return (
-        <nav aria-label="Article navigation" className="mt-6 flex items-stretch justify-between gap-4">
+        <nav aria-label={t('nav.articleNav')} className="mt-6 flex items-stretch justify-between gap-4">
             {prev ? (
                 <Link href={`/${prev.slug}`} className={`${cardClass} text-left`} rel="prev">
                     <span className="block text-xs font-medium text-ink-3 group-hover:text-ink-2 mb-1">
-                        &larr; Previous
+                        &larr; {t('nav.previous')}
                     </span>
                     <span className="block text-sm font-semibold text-ink group-hover:text-accent transition-colors truncate">
                         {prev.title}
@@ -52,7 +54,7 @@ export default function DocPagination({ prev, next }) {
             {next && (
                 <Link href={`/${next.slug}`} className={`${cardClass} text-right`} rel="next">
                     <span className="block text-xs font-medium text-ink-3 group-hover:text-ink-2 mb-1">
-                        Next &rarr;
+                        {t('nav.next')} &rarr;
                     </span>
                     <span className="block text-sm font-semibold text-ink group-hover:text-accent transition-colors truncate">
                         {next.title}

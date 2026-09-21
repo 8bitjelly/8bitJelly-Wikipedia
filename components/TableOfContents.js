@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useT } from '@/lib/i18n'
 
 // Must match the scroll-mt-24 on headings in MarkdownRenderer.
 const ACTIVE_OFFSET = 96
@@ -12,6 +13,7 @@ const ACTIVE_OFFSET = 96
  * would come out empty on several of them.
  */
 export default function TableOfContents({ headings = [] }) {
+    const t = useT()
     const [activeId, setActiveId] = useState(headings[0]?.id)
 
     useEffect(() => {
@@ -59,9 +61,9 @@ export default function TableOfContents({ headings = [] }) {
     if (headings.length < 2) return null
 
     return (
-        <nav aria-label="On this page" className="sticky top-20 max-h-[calc(100vh-7rem)] overflow-y-auto">
+        <nav aria-label={t('toc.title')} className="sticky top-20 max-h-[calc(100vh-7rem)] overflow-y-auto">
             <h2 className="font-semibold text-ink text-xs tracking-wider uppercase mb-3">
-                On this page
+                {t('toc.title')}
             </h2>
 
             <ul className="space-y-1 border-l border-line">

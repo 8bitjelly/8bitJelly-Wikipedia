@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import SidebarItem from './SidebarItem'
 import SidebarFilter from './SidebarFilter'
 import { filterDocs } from '@/lib/filterdocs'
+import { useLocale, useT } from '@/lib/i18n'
 
 /** 'a/b/c' -> ['a', 'a/b', 'a/b/c'] - includes the slug itself, so landing on a
  *  directory page shows that directory's children already open. */
@@ -37,7 +38,9 @@ function allBranches(nodes, out = []) {
  * and ReactMarkdown re-parses the whole document on every render, so a filter
  * input one level higher would re-parse the article on every keystroke.
  */
-export default function Sidebar({ tree, currentSlug = '', heading = 'Documentation' }) {
+export default function Sidebar({ tree, currentSlug = '', heading }) {
+    const t = useT()
+    const locale = useLocale()
     const [filter, setFilter] = useState('')
     const [expanded, setExpanded] = useState(
         () => new Set([...topLevelBranches(tree), ...ancestorsOf(currentSlug)])
@@ -74,18 +77,19 @@ export default function Sidebar({ tree, currentSlug = '', heading = 'Documentati
         <aside className="w-full">
             <div className="bg-surface rounded-xl border border-line shadow-sm p-5 lg:sticky lg:top-20">
                 <h2 className="font-semibold text-ink text-xs tracking-wider uppercase mb-4">
-                    {heading}
+                    {heading || t('nav.documentation')}
                 </h2>
 
                 <SidebarFilter value={filter} onChange={setFilter} />
 
                 <nav
-                    aria-label="Documentation"
+                    aria-label={t('nav.documentation')}
                     className="mt-4 lg:max-h-[calc(100vh-18rem)] overflow-y-auto pr-1"
                 >
                     {filtered.length === 0 ? (
                         <p className="px-1 py-2 text-sm text-ink-3">
-                            Nothing matches <span className="font-medium text-ink-2">{query}</span>.
+                            {t('filter.empty')}{' '}
+                            <span className="font-medium text-ink-2">{query}</span>.
                         </p>
                     ) : (
                         <ul className="space-y-0.5">
@@ -97,6 +101,7 @@ export default function Sidebar({ tree, currentSlug = '', heading = 'Documentati
                                     expanded={openBranches}
                                     onToggle={onToggle}
                                     query={query}
+                                    locale={locale}
                                 />
                             ))}
                         </ul>

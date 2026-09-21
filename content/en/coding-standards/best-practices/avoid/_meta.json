@@ -1,0 +1,17 @@
+{
+  "title": "Avoid",
+  "description": "",
+  "order": [
+    "creating-multiple-objects",
+    "destroy",
+    "find",
+    "linq-library",
+    "over-referencing",
+    "overusing-debug-log",
+    "overusing-getcomponent",
+    "public-variables",
+    "singleton",
+    "tight-coupling",
+    "update"
+  ]
+}

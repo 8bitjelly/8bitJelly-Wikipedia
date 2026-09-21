@@ -5,6 +5,8 @@ import remarkGfm from 'remark-gfm'
 import rehypeHighlight from 'rehype-highlight'
 import { visit } from 'unist-util-visit'
 import { Check, Copy, ExternalLink, Link as LinkIcon } from 'lucide-react'
+import { useT } from '@/lib/i18n'
+import MermaidDiagram from './MermaidDiagram'
 
 /**
  * Stamps the ids that lib/docs.js already generated onto the rendered
@@ -41,13 +43,14 @@ function resolveInternal(href, slug) {
 
 function makeHeading(Tag) {
     return function Heading({ id, children, ...rest }) {
+        const t = useT()
         return (
             <Tag id={id} className="group scroll-mt-24" {...rest}>
                 {children}
                 {id && (
                     <a
                         href={`#${id}`}
-                        aria-label="Permalink to this section"
+                        aria-label={t('toc.permalink')}
                         className="ml-2 inline-flex align-middle text-ink-3 opacity-0 transition-opacity
                             group-hover:opacity-100 focus:opacity-100 hover:text-accent no-underline"
                     >
@@ -59,13 +62,38 @@ function makeHeading(Tag) {
     }
 }
 
+/** Flattens react-markdown's code children (string, or array of strings). */
+function toText(children) {
+    if (typeof children === 'string') return children
+    if (Array.isArray(children)) return children.filter((c) => typeof c === 'string').join('')
+    return ''
+}
+
 /**
- * Code blocks get a copy button - 99 fenced blocks in a wiki about coding
+ * Code blocks get a copy button - 121 fenced blocks in a wiki about coding
  * standards, and the cheapest useful addition available.
+ *
+ * Also the hook for diagrams: a ```mermaid fence is replaced by <MermaidDiagram>
+ * rather than filled in place, because `.markdown-body pre` is a dark 13px
+ * monospace box that would swallow an SVG.
+ *
+ * The language lives on the child <code>, not on <pre>, so it has to be read
+ * out of the child's props.
  */
 function Pre({ children, ...rest }) {
+    const t = useT()
     const ref = useRef(null)
     const [copied, setCopied] = useState(false)
+
+    const codeProps = children?.props
+    const mermaidSource = /\blanguage-mermaid\b/.test(codeProps?.className || '')
+        ? toText(codeProps?.children)
+        : ''
+
+    // Guarded on a non-empty source: if react-markdown ever changes the shape of
+    // these children, the fence falls through to the normal code block instead
+    // of rendering an empty hole.
+    if (mermaidSource) return <MermaidDiagram source={mermaidSource} />
 
     const copy = async () => {
         try {
@@ -85,8 +113,8 @@ function Pre({ children, ...rest }) {
             <button
                 type="button"
                 onClick={copy}
-                aria-label={copied ? 'Copied' : 'Copy code'}
-                title={copied ? 'Copied' : 'Copy code'}
+                aria-label={copied ? t('code.copied') : t('code.copy')}
+                title={copied ? t('code.copied') : t('code.copy')}
                 className="absolute top-2.5 right-2.5 p-1.5 rounded-md border border-code-line
                     bg-code-bg text-hl-comment opacity-0 transition-opacity
                     group-hover/code:opacity-100 focus:opacity-100 hover:text-hl-fg"
@@ -101,13 +129,19 @@ function Pre({ children, ...rest }) {
     )
 }
 
+// Built once: creating these inside render would give them a new identity on
+// every pass and remount every heading in the document.
+const H2 = makeHeading('h2')
+const H3 = makeHeading('h3')
+const H4 = makeHeading('h4')
+
 function MarkdownRenderer({ content, headingIds = [], slug = '' }) {
     const components = {
         // A body h1 becomes an h2: the page header already owns the only h1.
-        h1: makeHeading('h2'),
-        h2: makeHeading('h2'),
-        h3: makeHeading('h3'),
-        h4: makeHeading('h4'),
+        h1: H2,
+        h2: H2,
+        h3: H3,
+        h4: H4,
         pre: Pre,
 
         a({ href = '', children, ...rest }) {

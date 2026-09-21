@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
+import { useT } from '@/lib/i18n'
 
 function escapeRegExp(value) {
     return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
@@ -28,11 +29,26 @@ function HighlightedText({ text, query }) {
 }
 
 /**
- * Purely presentational: expansion state is owned by <Sidebar>, so this
- * component holds no hooks and can return early without breaking any rules.
+ * Presentational: expansion state is owned by <Sidebar>, not here. That matters
+ * because the previous version called useState *below* a conditional early
+ * return - a Rules of Hooks violation waiting to fire. The only hook left is
+ * useT, called unconditionally at the top.
  */
-export default function SidebarItem({ item, currentSlug = '', level = 0, expanded, onToggle, query = '' }) {
+export default function SidebarItem({
+    item,
+    currentSlug = '',
+    level = 0,
+    expanded,
+    onToggle,
+    query = '',
+    locale,
+}) {
+    const t = useT()
     const hasChildren = item.children?.length > 0
+    // Untranslated articles stay visible with the fallback locale's title and a
+    // quiet marker. Hiding them would leave the Polish sidebar a stub.
+    const untranslated =
+        locale && item.availableIn?.length > 0 && !item.availableIn.includes(locale)
     const isOpen = hasChildren && expanded.has(item.slug)
     const isActive = currentSlug === item.slug
     const isAncestorOfActive = currentSlug.startsWith(`${item.slug}/`)
@@ -45,7 +61,7 @@ export default function SidebarItem({ item, currentSlug = '', level = 0, expande
                         type="button"
                         onClick={() => onToggle(item.slug)}
                         className="p-0.5 -ml-0.5 mr-0.5 rounded text-ink-3 hover:text-ink-2 hover:bg-surface-2 transition-colors"
-                        aria-label={isOpen ? `Collapse ${item.title}` : `Expand ${item.title}`}
+                        aria-label={t(isOpen ? 'nav.collapse' : 'nav.expand', { title: item.title })}
                         aria-expanded={isOpen}
                     >
                         <ChevronRight
@@ -68,6 +84,17 @@ export default function SidebarItem({ item, currentSlug = '', level = 0, expande
                     } ${item.isDirectory && !isActive ? 'font-medium' : ''}`}
                 >
                     <HighlightedText text={item.title} query={query} />
+                    {untranslated && (
+                        <span
+                            title={t('translation.badge', {
+                                locale: t(`locale.${item.availableIn[0]}`),
+                            })}
+                            className="ml-1.5 align-middle text-[10px] font-semibold tracking-wide
+                                text-ink-3 border border-line rounded px-1 py-px"
+                        >
+                            {item.availableIn[0].toUpperCase()}
+                        </span>
+                    )}
                 </Link>
             </div>
 
@@ -87,6 +114,7 @@ export default function SidebarItem({ item, currentSlug = '', level = 0, expande
                             expanded={expanded}
                             onToggle={onToggle}
                             query={query}
+                            locale={locale}
                         />
                     ))}
                 </ul>

@@ -43,3 +43,6 @@ next-env.d.ts
 
 # alternate build dirs (WIKI_DIST_DIR, see next.config.mjs)
 /.next-*
+
+# generated search index (npm run search-index)
+/public/search-index.*.json

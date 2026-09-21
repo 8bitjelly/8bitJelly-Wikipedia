@@ -206,6 +206,27 @@ body {
 }
 
 /* ------------------------------------------------------------------ *
+ * Mermaid diagrams
+ *
+ * The SVG itself is themed by Mermaid's own built-in light/dark theme -
+ * our tokens are oklch() and Mermaid's colour maths cannot read them.
+ * So the wiki palette dresses the container, not the drawing.
+ * ------------------------------------------------------------------ */
+.markdown-body .mermaid-figure {
+    @apply my-6 p-4 rounded-lg border border-line bg-surface-2 overflow-x-auto;
+}
+
+.markdown-body .mermaid-figure svg {
+    @apply mx-auto max-w-full h-auto;
+}
+
+/* Mermaid emits <a> inside the SVG; the accent underline from
+   `.markdown-body a` would otherwise bleed into the drawing. */
+.markdown-body .mermaid-figure a {
+    @apply no-underline;
+}
+
+/* ------------------------------------------------------------------ *
  * Syntax highlighting
  *
  * Replaces the static `highlight.js/styles/github-dark.css` import, which

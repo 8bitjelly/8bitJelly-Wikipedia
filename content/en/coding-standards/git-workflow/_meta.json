@@ -1,0 +1,9 @@
+{
+  "title": "Git Workflow",
+  "description": "",
+  "order": [
+    "branch-naming-convention",
+    "code-reviews",
+    "git-commit-messages"
+  ]
+}

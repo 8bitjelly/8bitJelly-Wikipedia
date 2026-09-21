@@ -1,4 +1,5 @@
 import { ACCENTS, useTheme } from '@/lib/theme'
+import { useT } from '@/lib/i18n'
 
 const LABELS = { rose: 'Rose', blue: 'Blue', green: 'Green' }
 
@@ -9,9 +10,10 @@ const LABELS = { rose: 'Rose', blue: 'Blue', green: 'Green' }
  */
 export default function AccentPicker() {
     const { accent, setAccent, mounted } = useTheme()
+    const t = useT()
 
     return (
-        <div role="group" aria-label="Accent colour" className="hidden sm:inline-flex items-center gap-1.5">
+        <div role="group" aria-label={t('accent.group')} className="hidden sm:inline-flex items-center gap-1.5">
             {ACCENTS.map((name) => {
                 const selected = mounted && accent === name
 

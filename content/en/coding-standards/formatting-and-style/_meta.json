@@ -1,0 +1,11 @@
+{
+  "title": "Formatting & Style",
+  "description": "",
+  "order": [
+    "bracket-placement",
+    "code-comments",
+    "code-indentation",
+    "method-declaration",
+    "method-separation-and-decomposition"
+  ]
+}

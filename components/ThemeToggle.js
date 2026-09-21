@@ -1,22 +1,25 @@
 import { Monitor, Moon, Sun } from 'lucide-react'
 import { useTheme } from '@/lib/theme'
+import { useT } from '@/lib/i18n'
 
 const OPTIONS = [
-    { value: 'light', Icon: Sun, label: 'Light theme' },
-    { value: 'dark', Icon: Moon, label: 'Dark theme' },
-    { value: 'system', Icon: Monitor, label: 'Match system' },
+    { value: 'light', Icon: Sun, stringKey: 'theme.light' },
+    { value: 'dark', Icon: Moon, stringKey: 'theme.dark' },
+    { value: 'system', Icon: Monitor, stringKey: 'theme.system' },
 ]
 
 export default function ThemeToggle() {
     const { theme, setTheme, mounted } = useTheme()
+    const t = useT()
 
     return (
         <div
             role="group"
-            aria-label="Colour theme"
+            aria-label={t('theme.group')}
             className="inline-flex items-center gap-0.5 p-0.5 rounded-lg border border-line bg-surface-2"
         >
-            {OPTIONS.map(({ value, Icon, label }) => {
+            {OPTIONS.map(({ value, Icon, stringKey }) => {
+                const label = t(stringKey)
                 // Gated on `mounted`: the server cannot know which option is
                 // selected, so rendering it before hydration would mismatch.
                 const selected = mounted && theme === value

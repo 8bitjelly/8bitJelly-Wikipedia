@@ -1,0 +1,9 @@
+{
+  "title": "Variables",
+  "description": "",
+  "order": [
+    "variables-declaration",
+    "method-arguments-variables",
+    "variables-organization"
+  ]
+}

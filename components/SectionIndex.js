@@ -1,4 +1,5 @@
 import DocCard from './DocCard'
+import { useT } from '@/lib/i18n'
 
 /**
  * Lists a section's direct children.
@@ -7,7 +8,9 @@ import DocCard from './DocCard'
  * them - these used to render a "page not found" card with an HTTP 200), and as
  * an "In this section" block under a directory that does have one.
  */
-export default function SectionIndex({ items = [], heading = 'In this section' }) {
+export default function SectionIndex({ items = [], heading }) {
+    const t = useT()
+
     if (items.length === 0) return null
 
     return (
@@ -16,7 +19,7 @@ export default function SectionIndex({ items = [], heading = 'In this section' }
                 id="section-index-heading"
                 className="text-lg font-semibold text-ink mb-6"
             >
-                {heading}
+                {heading || t('section.inThisSection')}
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -27,7 +30,7 @@ export default function SectionIndex({ items = [], heading = 'In this section' }
                         title={child.title}
                         description={child.description}
                         isDirectory={child.isDirectory}
-                        cta={child.isDirectory ? 'Browse section' : 'Read article'}
+                        cta={child.isDirectory ? t('section.browse') : t('section.read')}
                     />
                 ))}
             </div>
