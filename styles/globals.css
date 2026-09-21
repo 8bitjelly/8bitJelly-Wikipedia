@@ -1,57 +1,192 @@
 @import "tailwindcss";
 
-/* Modern Markdown Typography */
+/* Tailwind v4 binds `dark:` to prefers-color-scheme by default. Rebinding it to
+   a class is what makes a manual toggle possible at all. `:where()` keeps the
+   specificity at zero so `dark:` utilities don't outrank later ones.
+   A `darkMode: 'class'` key in a JS config does nothing in v4. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ------------------------------------------------------------------ *
+ * Design tokens
+ *
+ * Components reference these semantic names only - no raw slate/rose
+ * anywhere - so a theme is a set of variable values, not a set of
+ * `dark:` variants sprinkled through the markup.
+ * ------------------------------------------------------------------ */
+@theme {
+    --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+    /* surfaces */
+    --color-canvas: oklch(98.4% 0.003 247.858);
+    --color-surface: oklch(100% 0 0);
+    --color-surface-2: oklch(96.8% 0.007 247.896);
+
+    /* borders, weakest to strongest */
+    --color-line-soft: oklch(96.8% 0.007 247.896);
+    --color-line: oklch(92.9% 0.013 255.508);
+    --color-line-strong: oklch(86.9% 0.022 252.894);
+
+    /* text, strongest to weakest */
+    --color-ink: oklch(20.8% 0.042 265.755);
+    --color-ink-2: oklch(44.6% 0.03 256.802);
+    --color-ink-3: oklch(70.4% 0.04 256.788);
+
+    /* accent: one hue knob, everything else derived from it */
+    --color-accent: var(--accent-rose);
+    --color-on-accent: oklch(100% 0 0);
+    --color-accent-soft: color-mix(in oklab, var(--color-accent) 12%, var(--color-surface));
+    --color-accent-line: color-mix(in oklab, var(--color-accent) 35%, var(--color-line));
+
+    /* code blocks are dark in both themes, so one syntax palette serves both.
+       Values lifted from highlight.js/styles/github-dark.css. */
+    --color-code-bg: oklch(20.8% 0.042 265.755);
+    --color-code-line: oklch(27.8% 0.033 256.848);
+    --color-hl-fg: #c9d1d9;
+    --color-hl-keyword: #ff7b72;
+    --color-hl-entity: #d2a8ff;
+    --color-hl-const: #79c0ff;
+    --color-hl-string: #a5d6ff;
+    --color-hl-builtin: #ffa657;
+    --color-hl-comment: #8b949e;
+    --color-hl-tag: #7ee787;
+    --color-hl-bullet: #f2cc60;
+}
+
+/* The accent palette, one entry per theme. Not in @theme because these are
+   inputs to --color-accent rather than utilities in their own right. */
+:root {
+    --accent-rose: oklch(58.6% 0.253 17.585);
+    --accent-blue: oklch(54.6% 0.245 262.881);
+    --accent-green: oklch(55% 0.15 149.214);
+}
+
+/* ------------------------------------------------------------------ *
+ * Dark theme
+ *
+ * These MUST live on <html>, not <body>, for two reasons:
+ *   1. @theme emits into `@layer theme`, and an unlayered rule beats any
+ *      layered one - so this wins with no !important and no ordering games.
+ *   2. --color-accent-soft is a color-mix() substituted where it is declared.
+ *      Redefining --color-surface on the SAME element makes the mix
+ *      re-resolve against the dark surface. On <body> it would stay light.
+ * ------------------------------------------------------------------ */
+html.dark {
+    --color-canvas: oklch(17% 0.015 265);
+    --color-surface: oklch(21% 0.018 265);
+    --color-surface-2: oklch(26% 0.02 265);
+
+    --color-line-soft: oklch(26% 0.02 265);
+    --color-line: oklch(32% 0.022 265);
+    --color-line-strong: oklch(40% 0.024 265);
+
+    --color-ink: oklch(96% 0.008 265);
+    --color-ink-2: oklch(82% 0.015 265);
+    --color-ink-3: oklch(62% 0.02 265);
+
+    /* code sits below the surface so a block still reads as a block */
+    --color-code-bg: oklch(13.5% 0.014 265);
+    --color-code-line: oklch(24% 0.02 265);
+
+    /* lighter accents for contrast against a dark canvas */
+    --accent-rose: oklch(71% 0.19 17);
+    --accent-blue: oklch(70% 0.16 255);
+    --accent-green: oklch(72% 0.17 150);
+}
+
+html[data-accent="blue"] { --color-accent: var(--accent-blue); }
+html[data-accent="green"] { --color-accent: var(--accent-green); }
+
+/* ------------------------------------------------------------------ *
+ * Base
+ * ------------------------------------------------------------------ */
+html {
+    color-scheme: light;
+}
+
+/* Anchor links glide instead of jumping, unless the reader asked otherwise. */
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
+    }
+}
+
+html.dark {
+    color-scheme: dark;
+}
+
+body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+}
+
+/* ------------------------------------------------------------------ *
+ * Markdown typography
+ * ------------------------------------------------------------------ */
 .markdown-body {
-    @apply text-slate-700 text-[15px] leading-relaxed;
+    @apply text-ink-2 text-[15px] leading-relaxed;
 }
 
 .markdown-body h1 {
-    @apply text-2xl font-bold tracking-tight text-slate-900 border-b border-slate-200 pb-2.5 mb-6 mt-8;
+    @apply text-2xl font-bold tracking-tight text-ink border-b border-line pb-2.5 mb-6 mt-8;
 }
 
 .markdown-body h2 {
-    @apply text-xl font-semibold tracking-tight text-slate-900 border-b border-slate-100 pb-2 mb-4 mt-8;
+    @apply text-xl font-semibold tracking-tight text-ink border-b border-line-soft pb-2 mb-4 mt-8;
 }
 
 .markdown-body h3 {
-    @apply text-lg font-semibold text-slate-900 mb-3 mt-6;
+    @apply text-lg font-semibold text-ink mb-3 mt-6;
+}
+
+/* github-markdown-css used to cover h4; it is gone, so this is now on us. */
+.markdown-body h4 {
+    @apply text-base font-semibold text-ink mb-2 mt-5;
 }
 
 .markdown-body p {
-    @apply my-4 leading-7 text-slate-600;
+    @apply my-4 leading-7 text-ink-2;
+}
+
+.markdown-body strong {
+    @apply font-semibold text-ink;
 }
 
 .markdown-body a {
-    @apply text-rose-600 font-medium underline underline-offset-4 decoration-rose-200 hover:decoration-rose-500 transition-colors;
+    @apply text-accent font-medium underline underline-offset-4 decoration-accent-line hover:decoration-accent transition-colors;
 }
 
 .markdown-body ul {
-    @apply my-4 pl-5 list-disc space-y-1.5 marker:text-slate-400;
+    @apply my-4 pl-5 list-disc space-y-1.5 marker:text-ink-3;
 }
 
 .markdown-body ol {
-    @apply my-4 pl-5 list-decimal space-y-1.5 marker:text-slate-400;
+    @apply my-4 pl-5 list-decimal space-y-1.5 marker:text-ink-3;
 }
 
 .markdown-body li {
-    @apply text-slate-600 pl-1;
+    @apply text-ink-2 pl-1;
 }
 
-.markdown-body inline-code,
 .markdown-body :not(pre) > code {
-    @apply bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded text-[13px] font-mono border border-slate-200/60 font-normal;
+    @apply bg-surface-2 text-ink px-1.5 py-0.5 rounded text-[13px] font-mono border border-line font-normal;
 }
 
 .markdown-body pre {
-    @apply bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto my-6 border border-slate-800 text-[13px] font-mono leading-normal;
+    @apply bg-code-bg text-hl-fg p-4 rounded-lg overflow-x-auto my-6 border border-code-line text-[13px] font-mono leading-normal;
+}
+
+/* highlight.js themes add `padding: 1em` to `pre code.hljs`, which would
+   double up against the padding on `pre`. */
+.markdown-body pre code {
+    @apply p-0 bg-transparent border-0 text-inherit;
 }
 
 .markdown-body blockquote {
-    @apply border-l-2 border-rose-500 pl-4 italic text-slate-600 my-5 bg-slate-50/70 py-2.5 rounded-r-md;
+    @apply border-l-2 border-accent pl-4 italic text-ink-2 my-5 bg-surface-2 py-2.5 rounded-r-md;
 }
 
 .markdown-body hr {
-    @apply my-8 border-slate-200;
+    @apply my-8 border-line;
 }
 
 .markdown-body table {
@@ -59,9 +194,97 @@
 }
 
 .markdown-body th {
-    @apply border-b border-slate-200 font-semibold text-slate-900 p-2.5 bg-slate-50;
+    @apply border-b border-line font-semibold text-ink p-2.5 bg-surface-2;
 }
 
 .markdown-body td {
-    @apply border-b border-slate-100 p-2.5 text-slate-600;
+    @apply border-b border-line-soft p-2.5 text-ink-2;
+}
+
+.markdown-body img {
+    @apply rounded-lg border border-line my-4;
+}
+
+/* ------------------------------------------------------------------ *
+ * Syntax highlighting
+ *
+ * Replaces the static `highlight.js/styles/github-dark.css` import, which
+ * could not be scoped to a theme. Selector groups are github-dark's own.
+ * ------------------------------------------------------------------ */
+.hljs {
+    color: var(--color-hl-fg);
+    background: transparent;
+}
+
+.hljs-doctag,
+.hljs-keyword,
+.hljs-meta .hljs-keyword,
+.hljs-template-tag,
+.hljs-template-variable,
+.hljs-type,
+.hljs-variable.language_ {
+    color: var(--color-hl-keyword);
+}
+
+.hljs-title,
+.hljs-title.class_,
+.hljs-title.class_.inherited__,
+.hljs-title.function_ {
+    color: var(--color-hl-entity);
+}
+
+.hljs-attr,
+.hljs-attribute,
+.hljs-literal,
+.hljs-meta,
+.hljs-number,
+.hljs-operator,
+.hljs-variable,
+.hljs-selector-attr,
+.hljs-selector-class,
+.hljs-selector-id,
+.hljs-section {
+    color: var(--color-hl-const);
+}
+
+.hljs-regexp,
+.hljs-string,
+.hljs-meta .hljs-string {
+    color: var(--color-hl-string);
+}
+
+.hljs-built_in,
+.hljs-symbol {
+    color: var(--color-hl-builtin);
+}
+
+.hljs-comment,
+.hljs-code,
+.hljs-formula {
+    color: var(--color-hl-comment);
+}
+
+.hljs-name,
+.hljs-quote,
+.hljs-selector-tag,
+.hljs-selector-pseudo {
+    color: var(--color-hl-tag);
+}
+
+.hljs-subst,
+.hljs-emphasis,
+.hljs-strong {
+    color: var(--color-hl-fg);
+}
+
+.hljs-emphasis {
+    font-style: italic;
+}
+
+.hljs-strong {
+    font-weight: 700;
+}
+
+.hljs-bullet {
+    color: var(--color-hl-bullet);
 }

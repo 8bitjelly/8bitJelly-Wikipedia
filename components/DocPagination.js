@@ -31,17 +31,17 @@ export default function DocPagination({ prev, next }) {
     if (!prev && !next) return null
 
     const cardClass =
-        'flex-1 max-w-[280px] p-4 rounded-xl border border-slate-200 bg-white shadow-sm ' +
-        'hover:border-slate-300 transition-all group'
+        'flex-1 max-w-[280px] p-4 rounded-xl border border-line bg-surface shadow-sm ' +
+        'hover:border-line-strong transition-all group'
 
     return (
         <nav aria-label="Article navigation" className="mt-6 flex items-stretch justify-between gap-4">
             {prev ? (
                 <Link href={`/${prev.slug}`} className={`${cardClass} text-left`} rel="prev">
-                    <span className="block text-xs font-medium text-slate-400 group-hover:text-slate-600 mb-1">
+                    <span className="block text-xs font-medium text-ink-3 group-hover:text-ink-2 mb-1">
                         &larr; Previous
                     </span>
-                    <span className="block text-sm font-semibold text-slate-800 group-hover:text-rose-600 transition-colors truncate">
+                    <span className="block text-sm font-semibold text-ink group-hover:text-accent transition-colors truncate">
                         {prev.title}
                     </span>
                 </Link>
@@ -51,10 +51,10 @@ export default function DocPagination({ prev, next }) {
 
             {next && (
                 <Link href={`/${next.slug}`} className={`${cardClass} text-right`} rel="next">
-                    <span className="block text-xs font-medium text-slate-400 group-hover:text-slate-600 mb-1">
+                    <span className="block text-xs font-medium text-ink-3 group-hover:text-ink-2 mb-1">
                         Next &rarr;
                     </span>
-                    <span className="block text-sm font-semibold text-slate-800 group-hover:text-rose-600 transition-colors truncate">
+                    <span className="block text-sm font-semibold text-ink group-hover:text-accent transition-colors truncate">
                         {next.title}
                     </span>
                 </Link>

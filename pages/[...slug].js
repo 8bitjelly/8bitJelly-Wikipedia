@@ -1,8 +1,4 @@
 import Head from 'next/head'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
-import rehypeHighlight from 'rehype-highlight'
-import 'highlight.js/styles/github-dark.css'
 import {
     getAdjacentDocs,
     getAllDocSlugs,
@@ -12,6 +8,7 @@ import {
 } from '@/lib/docs'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import DocPagination from '@/components/DocPagination'
+import MarkdownRenderer from '@/components/MarkdownRenderer'
 import SectionIndex from '@/components/SectionIndex'
 
 export default function DocPage({ doc, prev, next, sectionChildren }) {
@@ -22,30 +19,30 @@ export default function DocPage({ doc, prev, next, sectionChildren }) {
                 {doc.meta.description && <meta name="description" content={doc.meta.description} />}
             </Head>
 
-            <article className="bg-white rounded-xl border border-slate-200/80 shadow-sm p-6 sm:p-10">
+            <article className="bg-surface rounded-xl border border-line shadow-sm p-6 sm:p-10">
                 <Breadcrumbs crumbs={doc.breadcrumbs} current={doc.meta.title} />
 
-                <header className="pb-6 mb-8 border-b border-slate-200">
-                    <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 mb-3">
+                <header className="pb-6 mb-8 border-b border-line">
+                    <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-ink mb-3">
                         {doc.meta.headline || doc.meta.title}
                     </h1>
                     {doc.meta.description && (
-                        <p className="text-base text-slate-600 leading-relaxed">
+                        <p className="text-base text-ink-2 leading-relaxed">
                             {doc.meta.description}
                         </p>
                     )}
                 </header>
 
                 {doc.content && (
-                    <div className="markdown-body">
-                        <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>
-                            {doc.content}
-                        </ReactMarkdown>
-                    </div>
+                    <MarkdownRenderer
+                        content={doc.content}
+                        headingIds={doc.headingIds}
+                        slug={doc.slug}
+                    />
                 )}
 
                 {sectionChildren.length > 0 && (
-                    <div className={doc.content ? 'mt-10 pt-8 border-t border-slate-200' : ''}>
+                    <div className={doc.content ? 'mt-10 pt-8 border-t border-line' : ''}>
                         <SectionIndex items={sectionChildren} />
                     </div>
                 )}

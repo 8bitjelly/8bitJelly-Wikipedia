@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.11",
-    "github-markdown-css": "^5.8.1",
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.539.0",
     "mdast-util-from-markdown": "^2.0.2",
@@ -24,7 +23,6 @@
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.21",
     "eslint": "^9",
     "eslint-config-next": "15.4.6",
     "postcss": "^8.5.6",

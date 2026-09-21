@@ -72,8 +72,8 @@ export default function Sidebar({ tree, currentSlug = '', heading = 'Documentati
 
     return (
         <aside className="w-full">
-            <div className="bg-white rounded-xl border border-slate-200/80 shadow-sm p-5 lg:sticky lg:top-8">
-                <h2 className="font-semibold text-slate-800 text-xs tracking-wider uppercase mb-4">
+            <div className="bg-surface rounded-xl border border-line shadow-sm p-5 lg:sticky lg:top-20">
+                <h2 className="font-semibold text-ink text-xs tracking-wider uppercase mb-4">
                     {heading}
                 </h2>
 
@@ -81,11 +81,11 @@ export default function Sidebar({ tree, currentSlug = '', heading = 'Documentati
 
                 <nav
                     aria-label="Documentation"
-                    className="mt-4 lg:max-h-[calc(100vh-16rem)] overflow-y-auto pr-1"
+                    className="mt-4 lg:max-h-[calc(100vh-18rem)] overflow-y-auto pr-1"
                 >
                     {filtered.length === 0 ? (
-                        <p className="px-1 py-2 text-sm text-slate-500">
-                            Nothing matches <span className="font-medium text-slate-700">{query}</span>.
+                        <p className="px-1 py-2 text-sm text-ink-3">
+                            Nothing matches <span className="font-medium text-ink-2">{query}</span>.
                         </p>
                     ) : (
                         <ul className="space-y-0.5">

@@ -14,7 +14,7 @@ export default function SectionIndex({ items = [], heading = 'In this section' }
         <section aria-labelledby="section-index-heading">
             <h2
                 id="section-index-heading"
-                className="text-lg font-semibold text-slate-900 mb-6"
+                className="text-lg font-semibold text-ink mb-6"
             >
                 {heading}
             </h2>

@@ -13,17 +13,17 @@ export default function Home({ sections }) {
                 />
             </Head>
 
-            <header className="mb-8 pb-6 border-b border-slate-200">
-                <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 mb-3">
+            <header className="mb-8 pb-6 border-b border-line">
+                <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-ink mb-3">
                     Welcome to our Wiki
                 </h1>
-                <p className="text-base sm:text-lg text-slate-600 max-w-2xl leading-relaxed">
+                <p className="text-base sm:text-lg text-ink-2 max-w-2xl leading-relaxed">
                     Explore our project guides, architecture overviews, and team coding standards.
                 </p>
             </header>
 
-            <section className="bg-white rounded-xl border border-slate-200/80 shadow-sm p-6 sm:p-8">
-                <h2 className="text-lg font-semibold text-slate-900 mb-6">Getting Started</h2>
+            <section className="bg-surface rounded-xl border border-line shadow-sm p-6 sm:p-8">
+                <h2 className="text-lg font-semibold text-ink mb-6">Getting Started</h2>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {sections.map((section) => (

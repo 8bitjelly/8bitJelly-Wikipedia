@@ -18,7 +18,7 @@ function HighlightedText({ text, query }) {
 
     return parts.map((part, i) =>
         part.toLowerCase() === needle ? (
-            <mark key={i} className="bg-rose-100 text-rose-800 rounded px-0.5">
+            <mark key={i} className="bg-accent-soft text-accent rounded px-0.5">
                 {part}
             </mark>
         ) : (
@@ -44,7 +44,7 @@ export default function SidebarItem({ item, currentSlug = '', level = 0, expande
                     <button
                         type="button"
                         onClick={() => onToggle(item.slug)}
-                        className="p-0.5 -ml-0.5 mr-0.5 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+                        className="p-0.5 -ml-0.5 mr-0.5 rounded text-ink-3 hover:text-ink-2 hover:bg-surface-2 transition-colors"
                         aria-label={isOpen ? `Collapse ${item.title}` : `Expand ${item.title}`}
                         aria-expanded={isOpen}
                     >
@@ -61,10 +61,10 @@ export default function SidebarItem({ item, currentSlug = '', level = 0, expande
                     aria-current={isActive ? 'page' : undefined}
                     className={`flex-1 min-w-0 px-2 py-1.5 rounded-lg text-sm transition-colors ${
                         isActive
-                            ? 'bg-rose-50 text-rose-700 font-semibold'
+                            ? 'bg-accent-soft text-accent font-semibold'
                             : isAncestorOfActive
-                                ? 'text-rose-600 font-medium hover:bg-slate-50'
-                                : 'text-slate-700 hover:bg-slate-100'
+                                ? 'text-accent font-medium hover:bg-canvas'
+                                : 'text-ink-2 hover:bg-surface-2'
                     } ${item.isDirectory && !isActive ? 'font-medium' : ''}`}
                 >
                     <HighlightedText text={item.title} query={query} />
