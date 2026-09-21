@@ -1,135 +1,92 @@
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
 import { ChevronRight } from 'lucide-react'
 
-// Helper: Check recursively if this node or any deep descendant matches
-function hasMatchingChild(node, query) {
-    if (!query) return false
-    const q = query.toLowerCase()
-    if (node.title?.toLowerCase().includes(q)) return true
-    if (node.children && node.children.length > 0) {
-        return node.children.some(child => hasMatchingChild(child, q))
-    }
-    return false
+function escapeRegExp(value) {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
 
-// Helper: Highlight matching substring in title
+/**
+ * Wraps matches in <mark>. Deliberately compares lowercased strings instead of
+ * re-testing the regex: a /gi/ regex is stateful across .test() calls, so the
+ * obvious implementation skips every other match.
+ */
 function HighlightedText({ text, query }) {
-    if (!query || !text) return <span>{text}</span>
+    if (!query || !text) return text || null
 
-    const regex = new RegExp(`(${query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')})`, 'gi')
-    const parts = text.split(regex)
+    const parts = String(text).split(new RegExp(`(${escapeRegExp(query)})`, 'gi'))
+    const needle = query.toLowerCase()
 
-    return (
-        <span>
-            {parts.map((part, i) =>
-                regex.test(part) ? (
-                    <mark key={i} className="bg-pink-200 text-pink-900 rounded-sm px-0.5 font-bold">
-                        {part}
-                    </mark>
-                ) : (
-                    part
-                )
-            )}
-        </span>
+    return parts.map((part, i) =>
+        part.toLowerCase() === needle ? (
+            <mark key={i} className="bg-rose-100 text-rose-800 rounded px-0.5">
+                {part}
+            </mark>
+        ) : (
+            <span key={i}>{part}</span>
+        )
     )
 }
 
-export default function SidebarItem({ item, currentSlug = '', level = 0, searchQuery = '' }) {
-    const isDirectMatch = searchQuery && item.title.toLowerCase().includes(searchQuery.toLowerCase())
-    const containsMatch = searchQuery ? hasMatchingChild(item, searchQuery) : false
-
-    // Hide node if searching and neither this node nor its subtree matches
-    if (searchQuery && !containsMatch) {
-        return null
-    }
-
-    const [isExpanded, setIsExpanded] = useState(
-        level === 0 || (currentSlug && currentSlug.startsWith(item.slug)) || containsMatch
-    )
-
-    // Expand automatically whenever search query matches any descendant
-    useEffect(() => {
-        if (containsMatch) {
-            setIsExpanded(true)
-        }
-    }, [containsMatch, searchQuery])
-
-    const decodedSlug = decodeURIComponent(currentSlug)
-    const isActive = decodedSlug === item.slug
-    const isParentOfActive = decodedSlug.startsWith(item.slug + '/')
-    const isClickable = !item.isDirectory || item.hasIndex
-
-    const paddingClass = {
-        0: 'pl-0',
-        1: 'pl-4',
-        2: 'pl-8',
-        3: 'pl-12',
-        4: 'pl-16'
-    }[level] || 'pl-20'
+/**
+ * Purely presentational: expansion state is owned by <Sidebar>, so this
+ * component holds no hooks and can return early without breaking any rules.
+ */
+export default function SidebarItem({ item, currentSlug = '', level = 0, expanded, onToggle, query = '' }) {
+    const hasChildren = item.children?.length > 0
+    const isOpen = hasChildren && expanded.has(item.slug)
+    const isActive = currentSlug === item.slug
+    const isAncestorOfActive = currentSlug.startsWith(`${item.slug}/`)
 
     return (
-        <li className="mb-1">
-            <div
-                className={`flex items-center rounded-lg transition-colors ${paddingClass} ${
-                    isDirectMatch ? 'bg-pink-50/80 ring-1 ring-pink-300' : ''
-                }`}
-            >
-                {item.isDirectory && item.children?.length > 0 && (
+        <li>
+            <div className="flex items-center" style={{ paddingLeft: level * 14 }}>
+                {hasChildren ? (
                     <button
                         type="button"
-                        onClick={() => setIsExpanded(!isExpanded)}
-                        className="mr-1 text-gray-500 hover:text-gray-700 transition-transform"
-                        aria-label={isExpanded ? 'Collapse' : 'Expand'}
+                        onClick={() => onToggle(item.slug)}
+                        className="p-0.5 -ml-0.5 mr-0.5 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+                        aria-label={isOpen ? `Collapse ${item.title}` : `Expand ${item.title}`}
+                        aria-expanded={isOpen}
                     >
                         <ChevronRight
-                            className={`w-4 h-4 transition-transform duration-200 ${
-                                isExpanded ? 'rotate-90' : ''
-                            }`}
+                            className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-90' : ''}`}
                         />
                     </button>
-                )}
-                {(!item.isDirectory || !item.children?.length) && <span className="w-4"></span>}
-
-                {isClickable ? (
-                    <Link
-                        href={`/${item.slug}`}
-                        className={`flex-1 px-2.5 py-1.5 rounded-lg transition-colors ${
-                            isActive
-                                ? 'bg-pink-100 text-pink-700 font-medium'
-                                : isParentOfActive
-                                    ? 'text-pink-600 font-medium'
-                                    : 'text-gray-700 hover:bg-pink-50'
-                        } ${item.isDirectory ? 'font-semibold' : ''}`}
-                    >
-                        <HighlightedText text={item.title} query={searchQuery} />
-                    </Link>
                 ) : (
-                    <span
-                        className={`flex-1 px-2.5 py-1.5 rounded-lg ${
-                            item.isDirectory
-                                ? 'font-semibold text-gray-600'
-                                : 'text-gray-400'
-                        }`}
-                    >
-                        <HighlightedText text={item.title} query={searchQuery} />
-                    </span>
+                    <span className="w-4 mr-0.5 flex-shrink-0" aria-hidden="true" />
                 )}
+
+                <Link
+                    href={`/${item.slug}`}
+                    aria-current={isActive ? 'page' : undefined}
+                    className={`flex-1 min-w-0 px-2 py-1.5 rounded-lg text-sm transition-colors ${
+                        isActive
+                            ? 'bg-rose-50 text-rose-700 font-semibold'
+                            : isAncestorOfActive
+                                ? 'text-rose-600 font-medium hover:bg-slate-50'
+                                : 'text-slate-700 hover:bg-slate-100'
+                    } ${item.isDirectory && !isActive ? 'font-medium' : ''}`}
+                >
+                    <HighlightedText text={item.title} query={query} />
+                </Link>
             </div>
 
-            {item.children && item.children.length > 0 && (
-                <ul
-                    className={`overflow-hidden transition-[max-height] duration-300 ease-in-out ${
-                        isExpanded ? 'max-h-[3000px]' : 'max-h-0'
-                    }`}
-                >
+            {/*
+              Rendered conditionally rather than hidden with max-h-0: collapsed
+              children then leave the DOM, the tab order and the a11y tree, and
+              a deep branch cannot be clipped by a max-height guess.
+            */}
+            {isOpen && (
+                <ul className="mt-0.5 space-y-0.5">
                     {item.children.map((child) => (
                         <SidebarItem
                             key={child.slug}
                             item={child}
                             currentSlug={currentSlug}
                             level={level + 1}
-                            searchQuery={searchQuery}
+                            expanded={expanded}
+                            onToggle={onToggle}
+                            query={query}
                         />
                     ))}
                 </ul>

@@ -1,8 +1,11 @@
 import '@/styles/globals.css'
 import 'github-markdown-css/github-markdown-light.css'
+import Layout from '@/components/Layout'
 
-function MyApp({ Component, pageProps }) {
-    return <Component {...pageProps} />
+export default function MyApp({ Component, pageProps }) {
+    return (
+        <Layout tree={pageProps.tree} currentSlug={pageProps.currentSlug}>
+            <Component {...pageProps} />
+        </Layout>
+    )
 }
-
-export default MyApp
