@@ -1,0 +1,9 @@
+{
+  "title": "Variables Declaration",
+  "description": "",
+  "order": [
+    "implicit-and-explicit-variable",
+    "local-variables",
+    "variables-naming-convention"
+  ]
+}

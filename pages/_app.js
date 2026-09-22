@@ -1,8 +1,17 @@
 import '@/styles/globals.css'
-import 'github-markdown-css/github-markdown-light.css'
+import Layout from '@/components/Layout'
+import TableOfContents from '@/components/TableOfContents'
+import { ThemeProvider } from '@/lib/theme'
 
-function MyApp({ Component, pageProps }) {
-    return <Component {...pageProps} />
+export default function MyApp({ Component, pageProps }) {
+    const headings = pageProps.doc?.headings
+    const toc = headings?.length > 1 ? <TableOfContents headings={headings} /> : null
+
+    return (
+        <ThemeProvider>
+            <Layout tree={pageProps.tree} currentSlug={pageProps.currentSlug} toc={toc}>
+                <Component {...pageProps} />
+            </Layout>
+        </ThemeProvider>
+    )
 }
-
-export default MyApp

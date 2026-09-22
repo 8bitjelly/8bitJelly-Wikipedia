@@ -1,83 +1,386 @@
 @import "tailwindcss";
 
-/* Custom animations */
-@keyframes blob {
-    0% {
-        transform: translate(0px, 0px) scale(1);
-    }
-    33% {
-        transform: translate(30px, -50px) scale(1.1);
-    }
-    66% {
-        transform: translate(-20px, 20px) scale(0.9);
-    }
-    100% {
-        transform: translate(0px, 0px) scale(1);
+/* Tailwind v4 binds `dark:` to prefers-color-scheme by default. Rebinding it to
+   a class is what makes a manual toggle possible at all. `:where()` keeps the
+   specificity at zero so `dark:` utilities don't outrank later ones.
+   A `darkMode: 'class'` key in a JS config does nothing in v4. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ------------------------------------------------------------------ *
+ * Design tokens
+ *
+ * Components reference these semantic names only - no raw slate/rose
+ * anywhere - so a theme is a set of variable values, not a set of
+ * `dark:` variants sprinkled through the markup.
+ * ------------------------------------------------------------------ */
+@theme {
+    /* The 8bitjelly.com type stack: Space Grotesk for text, Press Start 2P for
+       tiny uppercase labels and tags, JetBrains Mono for code. */
+    --font-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --font-pixel: "Press Start 2P", ui-monospace, monospace;
+
+    /* Palette taken from 8bitjelly.com: cream #fff1ec / #ffe4d6, ink (a.k.a.
+       eggplant) #1b0b2e, magenta #ff3d7f / #e0245c. The in-between greys are
+       ink mixed into cream with literal colours, so they depend on no other
+       variable and cannot go stale when a theme redefines one. */
+
+    /* surfaces */
+    --color-canvas: #fff1ec;
+    --color-surface: #fffaf7;
+    --color-surface-2: #ffe4d6;
+
+    /* borders, weakest to strongest */
+    --color-line-soft: color-mix(in oklab, #1b0b2e 8%, #fff1ec);
+    --color-line: color-mix(in oklab, #1b0b2e 15%, #fff1ec);
+    --color-line-strong: color-mix(in oklab, #1b0b2e 30%, #fff1ec);
+
+    /* the brand's chunky outline and hard offset shadow */
+    --color-edge: #1b0b2e;
+    --color-shadow: #1b0b2e;
+    --shadow-pop-sm: 2px 2px 0 var(--color-shadow);
+    --shadow-pop: 4px 4px 0 var(--color-shadow);
+    --shadow-pop-lg: 7px 7px 0 var(--color-shadow);
+
+    /* text, strongest to weakest */
+    --color-ink: #1b0b2e;
+    --color-ink-2: color-mix(in oklab, #1b0b2e 80%, #fff1ec);
+    --color-ink-3: color-mix(in oklab, #1b0b2e 58%, #fff1ec);
+
+    /* accent: one hue knob, everything else derived from it */
+    --color-accent: var(--accent-rose);
+    --color-on-accent: oklch(100% 0 0);
+    --color-accent-soft: color-mix(in oklab, var(--color-accent) 12%, var(--color-surface));
+    --color-accent-line: color-mix(in oklab, var(--color-accent) 35%, var(--color-line));
+
+    /* code blocks are dark in both themes, so one syntax palette serves both.
+       Values lifted from highlight.js/styles/github-dark.css. */
+    --color-code-bg: #1b0b2e;
+    --color-code-line: #2e1646;
+    --color-hl-fg: #c9d1d9;
+    --color-hl-keyword: #ff7b72;
+    --color-hl-entity: #d2a8ff;
+    --color-hl-const: #79c0ff;
+    --color-hl-string: #a5d6ff;
+    --color-hl-builtin: #ffa657;
+    --color-hl-comment: #8b949e;
+    --color-hl-tag: #7ee787;
+    --color-hl-bullet: #f2cc60;
+}
+
+/* The accent palette, one entry per theme. Not in @theme because these are
+   inputs to --color-accent rather than utilities in their own right. */
+:root {
+    /* `rose` is the brand magenta. Light mode takes the site's darker
+       magenta-2 so link text stays readable on cream; blue and green are
+       deepened versions of the site's sky and mint pastels. */
+    --accent-rose: #e0245c;
+    --accent-blue: #1f6fd6;
+    --accent-green: #0f8f5a;
+}
+
+/* ------------------------------------------------------------------ *
+ * Dark theme
+ *
+ * These MUST live on <html>, not <body>, for two reasons:
+ *   1. @theme emits into `@layer theme`, and an unlayered rule beats any
+ *      layered one - so this wins with no !important and no ordering games.
+ *   2. --color-accent-soft is a color-mix() substituted where it is declared.
+ *      Redefining --color-surface on the SAME element makes the mix
+ *      re-resolve against the dark surface. On <body> it would stay light.
+ * ------------------------------------------------------------------ */
+html.dark {
+    /* 8bitjelly.com has no dark mode; this is its eggplant footer turned into
+       a theme, with cream doing the job ink does in light mode. */
+    --color-canvas: #1b0b2e;
+    --color-surface: #2e1646;
+    --color-surface-2: #3b1f58;
+
+    --color-line-soft: color-mix(in oklab, #fff1ec 8%, #2e1646);
+    --color-line: color-mix(in oklab, #fff1ec 15%, #2e1646);
+    --color-line-strong: color-mix(in oklab, #fff1ec 28%, #2e1646);
+
+    /* cream outlines like the site's .eyebrow-dark / .chip-dark, but a shadow
+       that falls darker than the canvas, not a glowing cream one */
+    --color-edge: color-mix(in oklab, #fff1ec 80%, #1b0b2e);
+    --color-shadow: #07020d;
+
+    --color-ink: #fff1ec;
+    --color-ink-2: color-mix(in oklab, #fff1ec 82%, #1b0b2e);
+    --color-ink-3: color-mix(in oklab, #fff1ec 60%, #1b0b2e);
+
+    /* code sits below the surface so a block still reads as a block */
+    --color-code-bg: #12071f;
+    --color-code-line: #2e1646;
+
+    /* lighter accents for contrast against a dark canvas - light enough that
+       text on top of them has to be dark */
+    --accent-rose: #ff3d7f;
+    --accent-blue: #8ccaff;
+    --accent-green: #7ce3b5;
+    --color-on-accent: #1b0b2e;
+}
+
+html[data-accent="blue"] { --color-accent: var(--accent-blue); }
+html[data-accent="green"] { --color-accent: var(--accent-green); }
+
+/* ------------------------------------------------------------------ *
+ * Base
+ * ------------------------------------------------------------------ */
+html {
+    color-scheme: light;
+}
+
+/* Anchor links glide instead of jumping, unless the reader asked otherwise. */
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
     }
 }
 
-.animate-blob {
-    animation: blob 7s infinite;
+html.dark {
+    color-scheme: dark;
 }
 
-.animation-delay-2000 {
-    animation-delay: 2s;
+body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
 }
 
-.animation-delay-4000 {
-    animation-delay: 4s;
+/* The site's focus ring: thick, offset, in the accent colour. In @layer base so
+   that inputs drawing their own ring can still opt out with focus:outline-none -
+   an unlayered rule would beat that utility regardless of specificity. */
+@layer base {
+    :focus-visible {
+        outline: 3px solid var(--color-accent);
+        outline-offset: 3px;
+    }
 }
 
-/* Markdown styles */
+/* ------------------------------------------------------------------ *
+ * Header controls
+ *
+ * One look for every button in the header - search, menu triggers,
+ * the mobile hamburger: a chunky outline plus a hard offset shadow that
+ * lifts on hover and presses flat on click, like 8bitjelly.com's .btn.
+ *
+ * In @layer components, so a utility on the same element (rounded-lg,
+ * w-9 px-0) still wins over the defaults here.
+ * ------------------------------------------------------------------ */
+@layer components {
+    .pop-control {
+        @apply inline-flex items-center justify-center gap-1.5 h-9 px-2.5 rounded-full
+            border-2 border-edge bg-surface text-ink text-sm font-semibold shadow-pop-sm
+            transition-[translate,box-shadow,background-color] duration-150;
+    }
+
+    .pop-control:hover {
+        @apply -translate-x-0.5 -translate-y-0.5 shadow-pop;
+    }
+
+    .pop-control:active {
+        @apply translate-x-px translate-y-px shadow-none;
+    }
+
+    .pop-control[aria-expanded="true"] {
+        @apply bg-accent-soft;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .pop-control:hover,
+        .pop-control:active {
+            @apply translate-x-0 translate-y-0;
+        }
+    }
+}
+
+/* ------------------------------------------------------------------ *
+ * Markdown typography
+ * ------------------------------------------------------------------ */
 .markdown-body {
-    @apply text-gray-800;
+    @apply text-ink-2 text-[15px] leading-relaxed;
 }
 
 .markdown-body h1 {
-    @apply text-3xl font-bold border-b border-pink-200 pb-2 mb-6 mt-8 text-pink-700;
+    @apply text-2xl font-bold tracking-tight text-ink border-b border-line pb-2.5 mb-6 mt-8;
 }
 
 .markdown-body h2 {
-    @apply text-2xl font-bold border-b border-pink-100 pb-2 mb-6 mt-8 text-pink-600;
+    @apply text-xl font-semibold tracking-tight text-ink border-b border-line-soft pb-2 mb-4 mt-8;
 }
 
 .markdown-body h3 {
-    @apply text-xl font-semibold mt-6 mb-4 text-pink-500;
+    @apply text-lg font-semibold text-ink mb-3 mt-6;
+}
+
+/* github-markdown-css used to cover h4; it is gone, so this is now on us. */
+.markdown-body h4 {
+    @apply text-base font-semibold text-ink mb-2 mt-5;
 }
 
 .markdown-body p {
-    @apply my-5 leading-relaxed;
+    @apply my-4 leading-7 text-ink-2;
+}
+
+.markdown-body strong {
+    @apply font-semibold text-ink;
 }
 
 .markdown-body a {
-    @apply text-pink-500 hover:text-pink-700 underline transition-colors;
-}
-
-.markdown-body ul, .markdown-body ol {
-    @apply my-5 pl-6;
+    @apply text-accent font-medium underline underline-offset-4 decoration-accent-line hover:decoration-accent transition-colors;
 }
 
 .markdown-body ul {
-    @apply list-disc;
+    @apply my-4 pl-5 list-disc space-y-1.5 marker:text-ink-3;
 }
 
 .markdown-body ol {
-    @apply list-decimal;
+    @apply my-4 pl-5 list-decimal space-y-1.5 marker:text-ink-3;
 }
 
-.markdown-body code {
-    @apply bg-pink-50 text-pink-700 px-2 py-1 rounded-md text-sm font-mono;
+.markdown-body li {
+    @apply text-ink-2 pl-1;
+}
+
+.markdown-body :not(pre) > code {
+    @apply bg-surface-2 text-ink px-1.5 py-0.5 rounded text-[13px] font-mono border border-line font-normal;
 }
 
 .markdown-body pre {
-    @apply bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto my-6 shadow-lg;
+    @apply bg-code-bg text-hl-fg p-4 rounded-lg overflow-x-auto my-6 border border-code-line text-[13px] font-mono leading-normal;
+}
+
+/* highlight.js themes add `padding: 1em` to `pre code.hljs`, which would
+   double up against the padding on `pre`. */
+.markdown-body pre code {
+    @apply p-0 bg-transparent border-0 text-inherit;
 }
 
 .markdown-body blockquote {
-    @apply border-l-4 border-pink-300 pl-4 italic text-gray-600 my-6 bg-pink-50 p-4 rounded-r-lg;
+    @apply border-l-2 border-accent pl-4 italic text-ink-2 my-5 bg-surface-2 py-2.5 rounded-r-md;
 }
 
-/* Custom shadows */
-.shadow-pink-sm {
-    box-shadow: 0 1px 3px 0 rgba(236, 72, 153, 0.1), 0 1px 2px 0 rgba(236, 72, 153, 0.06);
+.markdown-body hr {
+    @apply my-8 border-line;
+}
+
+.markdown-body table {
+    @apply w-full border-collapse my-6 text-sm text-left;
+}
+
+.markdown-body th {
+    @apply border-b border-line font-semibold text-ink p-2.5 bg-surface-2;
+}
+
+.markdown-body td {
+    @apply border-b border-line-soft p-2.5 text-ink-2;
+}
+
+.markdown-body img {
+    @apply rounded-lg border border-line my-4;
+}
+
+/* ------------------------------------------------------------------ *
+ * Mermaid diagrams
+ *
+ * The SVG itself is themed by Mermaid's own built-in light/dark theme -
+ * our tokens are oklch() and Mermaid's colour maths cannot read them.
+ * So the wiki palette dresses the container, not the drawing.
+ * ------------------------------------------------------------------ */
+.markdown-body .mermaid-figure {
+    @apply my-6 p-4 rounded-lg border border-line bg-surface-2 overflow-x-auto;
+}
+
+.markdown-body .mermaid-figure svg {
+    @apply mx-auto max-w-full h-auto;
+}
+
+/* Mermaid emits <a> inside the SVG; the accent underline from
+   `.markdown-body a` would otherwise bleed into the drawing. */
+.markdown-body .mermaid-figure a {
+    @apply no-underline;
+}
+
+/* ------------------------------------------------------------------ *
+ * Syntax highlighting
+ *
+ * Replaces the static `highlight.js/styles/github-dark.css` import, which
+ * could not be scoped to a theme. Selector groups are github-dark's own.
+ * ------------------------------------------------------------------ */
+.hljs {
+    color: var(--color-hl-fg);
+    background: transparent;
+}
+
+.hljs-doctag,
+.hljs-keyword,
+.hljs-meta .hljs-keyword,
+.hljs-template-tag,
+.hljs-template-variable,
+.hljs-type,
+.hljs-variable.language_ {
+    color: var(--color-hl-keyword);
+}
+
+.hljs-title,
+.hljs-title.class_,
+.hljs-title.class_.inherited__,
+.hljs-title.function_ {
+    color: var(--color-hl-entity);
+}
+
+.hljs-attr,
+.hljs-attribute,
+.hljs-literal,
+.hljs-meta,
+.hljs-number,
+.hljs-operator,
+.hljs-variable,
+.hljs-selector-attr,
+.hljs-selector-class,
+.hljs-selector-id,
+.hljs-section {
+    color: var(--color-hl-const);
+}
+
+.hljs-regexp,
+.hljs-string,
+.hljs-meta .hljs-string {
+    color: var(--color-hl-string);
+}
+
+.hljs-built_in,
+.hljs-symbol {
+    color: var(--color-hl-builtin);
+}
+
+.hljs-comment,
+.hljs-code,
+.hljs-formula {
+    color: var(--color-hl-comment);
+}
+
+.hljs-name,
+.hljs-quote,
+.hljs-selector-tag,
+.hljs-selector-pseudo {
+    color: var(--color-hl-tag);
+}
+
+.hljs-subst,
+.hljs-emphasis,
+.hljs-strong {
+    color: var(--color-hl-fg);
+}
+
+.hljs-emphasis {
+    font-style: italic;
+}
+
+.hljs-strong {
+    font-weight: 700;
+}
+
+.hljs-bullet {
+    color: var(--color-hl-bullet);
 }

@@ -1,0 +1,11 @@
+{
+  "title": "Coding Standards",
+  "description": "",
+  "order": [
+    "architecture-guidelines",
+    "best-practices",
+    "formatting-and-style",
+    "git-workflow",
+    "variables"
+  ]
+}

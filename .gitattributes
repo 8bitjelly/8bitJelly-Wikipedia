@@ -1,0 +1,7 @@
+# Normalise markdown line endings so content-migration scripts cannot
+# produce whole-file diffs on machines where core.autocrlf differs.
+*.md text eol=lf
+*.json text eol=lf
+*.js text eol=lf
+*.mjs text eol=lf
+*.css text eol=lf

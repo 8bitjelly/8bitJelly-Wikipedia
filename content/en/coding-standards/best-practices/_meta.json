@@ -1,0 +1,15 @@
+{
+  "title": "Best Practices",
+  "description": "",
+  "order": [
+    "avoid",
+    "cache-references",
+    "design-patterns",
+    "events-and-delegates",
+    "input-actions",
+    "object-pooling",
+    "scriptable-objects",
+    "switch-statements",
+    "unity-profiler"
+  ]
+}
