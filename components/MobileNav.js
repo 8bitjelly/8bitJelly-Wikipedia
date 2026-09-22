@@ -31,8 +31,7 @@ export default function MobileNav({ tree, currentSlug }) {
                 type="button"
                 onClick={() => dialogRef.current?.showModal()}
                 aria-label={t('nav.openMenu')}
-                className="lg:hidden flex items-center justify-center p-1.5 rounded-lg border border-line
-                    bg-surface-2 text-ink-2 transition-colors hover:text-ink"
+                className="pop-control lg:hidden w-9 px-0 rounded-lg"
             >
                 <Menu className="w-4 h-4" aria-hidden="true" />
             </button>

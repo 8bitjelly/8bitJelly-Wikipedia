@@ -11,7 +11,7 @@ Content is markdown on disk under `content/`, read at build time by `lib/docs.js
 | Slug rules | `lib/slug.js` | `slugifySegment` (paths) and `headingSlug` (anchors). **The only two sluggers in the repo.** |
 | Routing | `pages/[...slug].js` | Catch-all. `fallback: 'blocking'` is load-bearing — see below. |
 | Chrome | `components/Layout.js` | Header, sidebar, TOC column, mobile nav. Both pages render through it. |
-| Theming | `styles/globals.css` + `lib/theme.js` | CSS variables on `<html>`; no `dark:` variants in component code. |
+| Theming | `styles/globals.css` + `lib/theme.js` | CSS variables on `<html>`; no `dark:` variants in component code. Palette and fonts are 8bitjelly.com's; `edge` + `shadow-pop*` are its chunky outline and hard offset shadow, `.pop-control` the shared header-button look. |
 | UI strings | `lib/i18n.js` | Plain dict + `useT()`. Never hardcode user-visible English in JSX. |
 | Locale constants | `lib/locales.js` | No Node imports, so client components can read it. `lib/docs.js` must never reach the browser bundle. |
 | Search | `lib/searchIndex.js` (build) + `lib/search.js` (client) | Index generated into `public/`, gitignored, lazy-fetched on first use. |
@@ -48,7 +48,7 @@ Content is markdown on disk under `content/`, read at build time by `lib/docs.js
 10. **Polish `ł` has no NFKD decomposition.** `normalize('NFD').replace(/\p{Diacritic}/gu,'')` will not strip it. `lib/slug.js` carries an explicit transliteration map — use it, don't reinvent it.
 11. **Don't use `git mv` on content.** This repo's history contains case-duplicate directories (`content/Tutorials/` *and* `content/tutorials/`), so `git mv` refuses paths it thinks are untracked. Plain `fs.renameSync` plus `git add -A` lets rename detection sort it out and repairs the case split as a side effect.
 12. **`::backdrop` gets literal colours, not theme tokens.** It lives in the top layer and custom-property inheritance into it is inconsistent; a failed `color-mix()` leaves the scrim fully transparent.
-13. **Dialog open/closed state lives in the DOM, not React.** Both the search dialog and the mobile nav use native `<dialog>` + `showModal()`. They sit inside `Layout`, so a React boolean there would re-render — and re-parse — the article every time one opened. `SearchContext` carries a stable `{ open }` handle, not state.
+13. **Dialog open/closed state lives in the DOM, not React.** Both the search dialog and the mobile nav use native `<dialog>` + `showModal()`. They sit inside `Layout`, so a React boolean there would re-render — and re-parse — the article every time one opened. `SearchContext` carries a stable `{ open }` handle, not state. The header dropdowns (theme, accent, language) are the one exception: their open flag is React state, but it lives in the `HeaderMenu` leaf — never lift it into `SiteHeader` or `Layout`.
 14. **`npx next build` skips npm lifecycle scripts.** Only `npm run build` runs `prebuild`, so only that path validates content and regenerates the search index.
 15. **Never run a build while `next dev` is up.** They share `.next/` and the build deletes chunks the dev server needs, which surfaces as `Cannot find module './chunks/vendor-chunks/next.js'` and spurious 500s. Set `WIKI_DIST_DIR` to give the second process its own directory.
 

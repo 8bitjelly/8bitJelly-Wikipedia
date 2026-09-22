@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { Languages } from 'lucide-react'
+import HeaderMenu, { MenuOption } from './HeaderMenu'
 import { DEFAULT_LOCALE, LOCALES, LOCALE_LABELS, LOCALE_SHORT } from '@/lib/locales'
 import { useT } from '@/lib/i18n'
 
@@ -17,32 +19,41 @@ export default function LanguageSwitcher() {
     const active = router.locale || DEFAULT_LOCALE
 
     return (
-        <div
-            role="group"
-            aria-label={t('lang.group')}
-            className="inline-flex items-center gap-0.5 p-0.5 rounded-lg border border-line bg-surface-2"
+        <HeaderMenu
+            label={t('lang.group')}
+            valueLabel={LOCALE_LABELS[active]}
+            trigger={
+                <>
+                    <Languages className="hidden sm:block w-4 h-4" aria-hidden="true" />
+                    <span className="font-pixel text-[9px] leading-none">{LOCALE_SHORT[active]}</span>
+                </>
+            }
         >
-            {LOCALES.map((locale) => {
-                const selected = locale === active
+            {(close) =>
+                LOCALES.map((locale) => {
+                    const selected = locale === active
 
-                return (
-                    <Link
-                        key={locale}
-                        href={router.asPath}
-                        locale={locale}
-                        hrefLang={locale}
-                        aria-current={selected ? 'true' : undefined}
-                        title={LOCALE_LABELS[locale]}
-                        className={`px-2 py-1 rounded-md text-xs font-semibold transition-colors ${
-                            selected
-                                ? 'bg-surface text-ink shadow-sm'
-                                : 'text-ink-3 hover:text-ink-2'
-                        }`}
-                    >
-                        {LOCALE_SHORT[locale]}
-                    </Link>
-                )
-            })}
-        </div>
+                    return (
+                        <MenuOption
+                            key={locale}
+                            as={Link}
+                            href={router.asPath}
+                            locale={locale}
+                            hrefLang={locale}
+                            // Endonyms, so a screen reader should voice each in its own language.
+                            lang={locale}
+                            aria-current={selected ? 'true' : undefined}
+                            selected={selected}
+                            onClick={() => close(true)}
+                        >
+                            <span className="w-6 flex-shrink-0 font-pixel text-[8px] text-ink-3">
+                                {LOCALE_SHORT[locale]}
+                            </span>
+                            {LOCALE_LABELS[locale]}
+                        </MenuOption>
+                    )
+                })
+            }
+        </HeaderMenu>
     )
 }

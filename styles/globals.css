@@ -14,22 +14,38 @@
  * `dark:` variants sprinkled through the markup.
  * ------------------------------------------------------------------ */
 @theme {
-    --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+    /* The 8bitjelly.com type stack: Space Grotesk for text, Press Start 2P for
+       tiny uppercase labels and tags, JetBrains Mono for code. */
+    --font-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --font-pixel: "Press Start 2P", ui-monospace, monospace;
+
+    /* Palette taken from 8bitjelly.com: cream #fff1ec / #ffe4d6, ink (a.k.a.
+       eggplant) #1b0b2e, magenta #ff3d7f / #e0245c. The in-between greys are
+       ink mixed into cream with literal colours, so they depend on no other
+       variable and cannot go stale when a theme redefines one. */
 
     /* surfaces */
-    --color-canvas: oklch(98.4% 0.003 247.858);
-    --color-surface: oklch(100% 0 0);
-    --color-surface-2: oklch(96.8% 0.007 247.896);
+    --color-canvas: #fff1ec;
+    --color-surface: #fffaf7;
+    --color-surface-2: #ffe4d6;
 
     /* borders, weakest to strongest */
-    --color-line-soft: oklch(96.8% 0.007 247.896);
-    --color-line: oklch(92.9% 0.013 255.508);
-    --color-line-strong: oklch(86.9% 0.022 252.894);
+    --color-line-soft: color-mix(in oklab, #1b0b2e 8%, #fff1ec);
+    --color-line: color-mix(in oklab, #1b0b2e 15%, #fff1ec);
+    --color-line-strong: color-mix(in oklab, #1b0b2e 30%, #fff1ec);
+
+    /* the brand's chunky outline and hard offset shadow */
+    --color-edge: #1b0b2e;
+    --color-shadow: #1b0b2e;
+    --shadow-pop-sm: 2px 2px 0 var(--color-shadow);
+    --shadow-pop: 4px 4px 0 var(--color-shadow);
+    --shadow-pop-lg: 7px 7px 0 var(--color-shadow);
 
     /* text, strongest to weakest */
-    --color-ink: oklch(20.8% 0.042 265.755);
-    --color-ink-2: oklch(44.6% 0.03 256.802);
-    --color-ink-3: oklch(70.4% 0.04 256.788);
+    --color-ink: #1b0b2e;
+    --color-ink-2: color-mix(in oklab, #1b0b2e 80%, #fff1ec);
+    --color-ink-3: color-mix(in oklab, #1b0b2e 58%, #fff1ec);
 
     /* accent: one hue knob, everything else derived from it */
     --color-accent: var(--accent-rose);
@@ -39,8 +55,8 @@
 
     /* code blocks are dark in both themes, so one syntax palette serves both.
        Values lifted from highlight.js/styles/github-dark.css. */
-    --color-code-bg: oklch(20.8% 0.042 265.755);
-    --color-code-line: oklch(27.8% 0.033 256.848);
+    --color-code-bg: #1b0b2e;
+    --color-code-line: #2e1646;
     --color-hl-fg: #c9d1d9;
     --color-hl-keyword: #ff7b72;
     --color-hl-entity: #d2a8ff;
@@ -55,9 +71,12 @@
 /* The accent palette, one entry per theme. Not in @theme because these are
    inputs to --color-accent rather than utilities in their own right. */
 :root {
-    --accent-rose: oklch(58.6% 0.253 17.585);
-    --accent-blue: oklch(54.6% 0.245 262.881);
-    --accent-green: oklch(55% 0.15 149.214);
+    /* `rose` is the brand magenta. Light mode takes the site's darker
+       magenta-2 so link text stays readable on cream; blue and green are
+       deepened versions of the site's sky and mint pastels. */
+    --accent-rose: #e0245c;
+    --accent-blue: #1f6fd6;
+    --accent-green: #0f8f5a;
 }
 
 /* ------------------------------------------------------------------ *
@@ -71,26 +90,35 @@
  *      re-resolve against the dark surface. On <body> it would stay light.
  * ------------------------------------------------------------------ */
 html.dark {
-    --color-canvas: oklch(17% 0.015 265);
-    --color-surface: oklch(21% 0.018 265);
-    --color-surface-2: oklch(26% 0.02 265);
+    /* 8bitjelly.com has no dark mode; this is its eggplant footer turned into
+       a theme, with cream doing the job ink does in light mode. */
+    --color-canvas: #1b0b2e;
+    --color-surface: #2e1646;
+    --color-surface-2: #3b1f58;
 
-    --color-line-soft: oklch(26% 0.02 265);
-    --color-line: oklch(32% 0.022 265);
-    --color-line-strong: oklch(40% 0.024 265);
+    --color-line-soft: color-mix(in oklab, #fff1ec 8%, #2e1646);
+    --color-line: color-mix(in oklab, #fff1ec 15%, #2e1646);
+    --color-line-strong: color-mix(in oklab, #fff1ec 28%, #2e1646);
 
-    --color-ink: oklch(96% 0.008 265);
-    --color-ink-2: oklch(82% 0.015 265);
-    --color-ink-3: oklch(62% 0.02 265);
+    /* cream outlines like the site's .eyebrow-dark / .chip-dark, but a shadow
+       that falls darker than the canvas, not a glowing cream one */
+    --color-edge: color-mix(in oklab, #fff1ec 80%, #1b0b2e);
+    --color-shadow: #07020d;
+
+    --color-ink: #fff1ec;
+    --color-ink-2: color-mix(in oklab, #fff1ec 82%, #1b0b2e);
+    --color-ink-3: color-mix(in oklab, #fff1ec 60%, #1b0b2e);
 
     /* code sits below the surface so a block still reads as a block */
-    --color-code-bg: oklch(13.5% 0.014 265);
-    --color-code-line: oklch(24% 0.02 265);
+    --color-code-bg: #12071f;
+    --color-code-line: #2e1646;
 
-    /* lighter accents for contrast against a dark canvas */
-    --accent-rose: oklch(71% 0.19 17);
-    --accent-blue: oklch(70% 0.16 255);
-    --accent-green: oklch(72% 0.17 150);
+    /* lighter accents for contrast against a dark canvas - light enough that
+       text on top of them has to be dark */
+    --accent-rose: #ff3d7f;
+    --accent-blue: #8ccaff;
+    --accent-green: #7ce3b5;
+    --color-on-accent: #1b0b2e;
 }
 
 html[data-accent="blue"] { --color-accent: var(--accent-blue); }
@@ -117,6 +145,53 @@ html.dark {
 body {
     background-color: var(--color-canvas);
     color: var(--color-ink);
+}
+
+/* The site's focus ring: thick, offset, in the accent colour. In @layer base so
+   that inputs drawing their own ring can still opt out with focus:outline-none -
+   an unlayered rule would beat that utility regardless of specificity. */
+@layer base {
+    :focus-visible {
+        outline: 3px solid var(--color-accent);
+        outline-offset: 3px;
+    }
+}
+
+/* ------------------------------------------------------------------ *
+ * Header controls
+ *
+ * One look for every button in the header - search, menu triggers,
+ * the mobile hamburger: a chunky outline plus a hard offset shadow that
+ * lifts on hover and presses flat on click, like 8bitjelly.com's .btn.
+ *
+ * In @layer components, so a utility on the same element (rounded-lg,
+ * w-9 px-0) still wins over the defaults here.
+ * ------------------------------------------------------------------ */
+@layer components {
+    .pop-control {
+        @apply inline-flex items-center justify-center gap-1.5 h-9 px-2.5 rounded-full
+            border-2 border-edge bg-surface text-ink text-sm font-semibold shadow-pop-sm
+            transition-[translate,box-shadow,background-color] duration-150;
+    }
+
+    .pop-control:hover {
+        @apply -translate-x-0.5 -translate-y-0.5 shadow-pop;
+    }
+
+    .pop-control:active {
+        @apply translate-x-px translate-y-px shadow-none;
+    }
+
+    .pop-control[aria-expanded="true"] {
+        @apply bg-accent-soft;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .pop-control:hover,
+        .pop-control:active {
+            @apply translate-x-0 translate-y-0;
+        }
+    }
 }
 
 /* ------------------------------------------------------------------ *
